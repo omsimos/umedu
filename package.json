@@ -10,28 +10,28 @@
     "ui:add": "bunx --bun shadcn@canary add"
   },
   "dependencies": {
-    "@radix-ui/react-accordion": "^1.2.3",
-    "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-accordion": "^1.2.8",
+    "@radix-ui/react-dropdown-menu": "^2.1.12",
+    "@radix-ui/react-slot": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.477.0",
-    "next": "15.2.0",
-    "next-themes": "^0.4.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.0.2",
+    "lucide-react": "^0.503.0",
+    "next": "15.3.1",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.0",
-    "@eslint/eslintrc": "^3"
+    "typescript": "^5.8.3",
+    "@types/node": "^20.17.30",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@tailwindcss/postcss": "^4.1.4",
+    "tailwindcss": "^4.1.4",
+    "eslint": "^9.25.1",
+    "eslint-config-next": "15.3.1",
+    "@eslint/eslintrc": "^3.3.1"
   }
 }
