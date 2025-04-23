@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "ui:add": "bunx --bun shadcn@canary add"
+    "ui:add": "bunx --bun shadcn@latest add"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.8",
