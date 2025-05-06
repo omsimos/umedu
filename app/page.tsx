@@ -14,8 +14,10 @@ export default function Home() {
         open-source, anonymous, private <i>edu</i> forums
       </p>
 
-      <Button className="mt-4" variant="outline">
-        Access your private channel <AntennaIcon />
+      <Button asChild className="mt-4" variant="outline">
+        <Link href="/login">
+          Access your private channel <AntennaIcon />
+        </Link>
       </Button>
 
       <section className="max-w-lg text-left mt-24 w-full space-y-12">
