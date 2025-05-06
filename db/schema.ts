@@ -1,18 +1,18 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const channelTable = sqliteTable("channel", {
+export const forumTable = sqliteTable("forum", {
   id: text("id").primaryKey(),
 });
 
 export const sessionTable = sqliteTable("session", {
   id: text("id").primaryKey(),
-  channelId: text("channel_id")
+  forumId: text("forum_id")
     .notNull()
-    .references(() => channelTable.id),
+    .references(() => forumTable.id),
   expiresAt: integer("expires_at", {
     mode: "timestamp",
   }).notNull(),
 });
 
-export type Channel = typeof channelTable.$inferSelect;
+export type Forum = typeof forumTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;

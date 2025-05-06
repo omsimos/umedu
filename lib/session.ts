@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { sha256 } from "@oslojs/crypto/sha2";
 
 import { db } from "@/db";
-import { Session, sessionTable, Channel, channelTable } from "@/db/schema";
+import { Session, sessionTable, Forum, forumTable } from "@/db/schema";
 
 export function generateSessionToken() {
   const bytes = new Uint8Array(20);
@@ -18,12 +18,12 @@ export function generateSessionToken() {
 
 export async function createSession(
   token: string,
-  channelId: string,
+  forumId: string,
 ): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const session: Session = {
     id: sessionId,
-    channelId,
+    forumId,
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   };
   await db.insert(sessionTable).values(session);
@@ -35,17 +35,17 @@ export async function validateSessionToken(
 ): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const result = await db
-    .select({ channel: channelTable, session: sessionTable })
+    .select({ forum: forumTable, session: sessionTable })
     .from(sessionTable)
-    .innerJoin(channelTable, eq(sessionTable.channelId, channelTable.id))
+    .innerJoin(forumTable, eq(sessionTable.forumId, forumTable.id))
     .where(eq(sessionTable.id, sessionId));
   if (result.length < 1) {
-    return { session: null, channel: null };
+    return { session: null, forum: null };
   }
-  const { channel, session } = result[0];
+  const { forum, session } = result[0];
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
-    return { session: null, channel: null };
+    return { session: null, forum: null };
   }
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
@@ -56,15 +56,15 @@ export async function validateSessionToken(
       })
       .where(eq(sessionTable.id, session.id));
   }
-  return { session, channel };
+  return { session, forum };
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 }
 
-export async function invalidateAllSessions(channelId: string): Promise<void> {
-  await db.delete(sessionTable).where(eq(sessionTable.channelId, channelId));
+export async function invalidateAllSessions(forumId: string): Promise<void> {
+  await db.delete(sessionTable).where(eq(sessionTable.forumId, forumId));
 }
 
 export async function setSessionTokenCookie(
@@ -93,5 +93,5 @@ export async function deleteSessionTokenCookie(): Promise<void> {
 }
 
 export type SessionValidationResult =
-  | { session: Session; channel: Channel }
-  | { session: null; channel: null };
+  | { session: Session; forum: Forum }
+  | { session: null; forum: null };

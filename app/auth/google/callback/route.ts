@@ -72,10 +72,10 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  const channelId = email.split("@")[1].split(".")[0];
+  const forumId = email.split("@")[1].split(".")[0];
 
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, channelId);
+  const session = await createSession(sessionToken, forumId);
   await setSessionTokenCookie(sessionToken, session.expiresAt);
   return new Response(null, {
     status: 302,

@@ -49,7 +49,7 @@ export default function Login() {
               <div>
                 Sign in with your{" "}
                 <span className="font-semibold">.edu email</span> to access your
-                school&apos;s private channel.
+                school&apos;s private forum.
               </div>
             </AlertDescription>
           </Alert>
@@ -58,7 +58,7 @@ export default function Login() {
             <div className="flex items-start gap-2">
               <School className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
               <p className="text-sm text-muted-foreground">
-                You&apos;ll be assigned to a private channel based on your
+                You&apos;ll be assigned to a private forum based on your
                 educational institution&apos;s email domain.
               </p>
             </div>
