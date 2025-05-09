@@ -5,7 +5,8 @@ import type React from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
-import { LogInIcon, School, Shield, Info } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { LogInIcon, School, Shield, Info, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,6 +22,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Login() {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const searchParams = useSearchParams();
+  const hasInvalidEmailError = searchParams.get("error") === "invalid_email";
 
   const handleSignInClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isAgeVerified) {
@@ -36,23 +39,42 @@ export default function Login() {
     <div className="container mx-auto px-4 py-8 max-w-md">
       <Card className="w-full">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to Umedu</CardTitle>
           <CardDescription>
             Connect with your academic community
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <Alert variant="default" className="border-primary/20 bg-primary/10">
-            <Info className="h-4 w-4 text-primary" />
-            <AlertDescription className="text-foreground">
-              <div>
-                Sign in with your{" "}
-                <span className="font-semibold">.edu email</span> to access your
-                school&apos;s private forum.
-              </div>
-            </AlertDescription>
-          </Alert>
+          {hasInvalidEmailError ? (
+            <Alert
+              variant="destructive"
+              className="border-destructive/20 bg-destructive/10"
+            >
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+              <AlertDescription className="text-destructive">
+                <div>
+                  Invalid email domain. Please use a valid{" "}
+                  <span className="font-semibold">.edu email</span> to access
+                  this platform.
+                </div>
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert
+              variant="default"
+              className="border-primary/20 bg-primary/10"
+            >
+              <Info className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-foreground">
+                <div>
+                  Sign in with your{" "}
+                  <span className="font-semibold">.edu email</span> to access
+                  your school&apos;s private forum.
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
 
           <div className="space-y-4">
             <div className="flex items-start gap-2">
@@ -85,7 +107,7 @@ export default function Login() {
                 htmlFor="age-verification"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground"
               >
-                I confirm that I am 18 years of age or older
+                I confirm that I am 18 years of age or older.
               </label>
             </div>
 
@@ -96,7 +118,7 @@ export default function Login() {
               </Link>{" "}
               and{" "}
               <Link href="/guidelines" className="text-primary hover:underline">
-                Community Guidelines
+                Community Guidelines.
               </Link>
             </p>
           </div>
@@ -119,10 +141,9 @@ export default function Login() {
 
         <Separator />
 
-        <CardFooter className="flex flex-col space-y-4 pt-4">
+        <CardFooter className="flex flex-col space-y-4">
           <p className="text-xs text-muted-foreground/70 italic">
-            This platform is not affiliated with any educational institution. It
-            is an independent service for students and faculty.
+            This platform is not affiliated with any educational institution.
           </p>
         </CardFooter>
       </Card>

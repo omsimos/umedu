@@ -7,8 +7,12 @@ import { type } from "arktype";
 import { google } from "@/lib/oauth";
 import { cookies } from "next/headers";
 import { decodeIdToken } from "arctic";
+import { nanoid } from "nanoid";
 
 import type { OAuth2Tokens } from "arctic";
+import { db } from "@/db";
+import { forumTable, userTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 const Claims = type({
   sub: "string",
@@ -44,7 +48,6 @@ export async function GET(request: Request): Promise<Response> {
   try {
     tokens = await google.validateAuthorizationCode(code, codeVerifier);
   } catch {
-    // Invalid code or client credentials
     console.log("Invalid code or client credentials");
     return new Response(null, {
       status: 400,
@@ -52,12 +55,14 @@ export async function GET(request: Request): Promise<Response> {
   }
   const claims = Claims(decodeIdToken(tokens.idToken()));
 
-  let email = "";
+  let email = ""; // for authentication only, this is not stored.
+  let authId = "";
 
   if (claims instanceof type.errors) {
     console.log(claims.summary);
   } else {
     email = claims.email;
+    authId = claims.sub;
   }
 
   const isEduEmail = email.split("@")[1].includes(".edu");
@@ -72,15 +77,49 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  const forumId = email.split("@")[1].split(".")[0];
+  const userExists = await db.query.userTable.findFirst({
+    where: eq(userTable.authId, authId),
+  });
+
+  if (userExists) {
+    const sessionToken = generateSessionToken();
+    const session = await createSession(sessionToken, authId);
+    await setSessionTokenCookie(sessionToken, session.expiresAt);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/forum",
+      },
+    });
+  }
+
+  const forumId = email.split("@")[1];
+
+  const forumExists = await db.query.forumTable.findFirst({
+    where: eq(forumTable.id, forumId),
+  });
+
+  if (!forumExists) {
+    await db.insert(forumTable).values({
+      id: forumId,
+    });
+  }
+
+  const userId = nanoid();
+
+  await db.insert(userTable).values({
+    id: userId,
+    authId,
+    forumId,
+  });
 
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, forumId);
-  await setSessionTokenCookie(sessionToken, session.expiresAt);
+  const session = await createSession(sessionToken, userId);
+  setSessionTokenCookie(sessionToken, session.expiresAt);
   return new Response(null, {
     status: 302,
     headers: {
-      Location: "/",
+      Location: "/feed",
     },
   });
 }

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "bddbec5d-3e20-4de4-92bd-cca50de6fde0",
+  "id": "17a4bea4-bbf7-4a30-a158-6a7ed0729025",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "forum": {
@@ -31,8 +31,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "forum_id": {
-          "name": "forum_id",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -48,9 +48,54 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "session_forum_id_forum_id_fk": {
-          "name": "session_forum_id_forum_id_fk",
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "auth_id": {
+          "name": "auth_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "forum_id": {
+          "name": "forum_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_forum_id_forum_id_fk": {
+          "name": "user_forum_id_forum_id_fk",
+          "tableFrom": "user",
           "tableTo": "forum",
           "columnsFrom": [
             "forum_id"
