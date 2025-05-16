@@ -7,7 +7,6 @@ export const forumTable = sqliteTable("forum", {
 
 export const postTable = sqliteTable("post", {
   id: text("id").primaryKey(),
-  // for anonymity, user is not referenced
   forumId: text("forum_id")
     .notNull()
     .references(() => forumTable.id),
@@ -16,24 +15,15 @@ export const postTable = sqliteTable("post", {
   createdAt: text().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
-export const userTable = sqliteTable("user", {
+export const sessionTable = sqliteTable("session", {
   id: text("id").primaryKey(),
-  authId: text("auth_id").notNull(),
   forumId: text("forum_id")
     .notNull()
     .references(() => forumTable.id),
-});
-
-export const sessionTable = sqliteTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id),
   expiresAt: integer("expires_at", {
     mode: "timestamp",
   }).notNull(),
 });
 
-export type User = typeof userTable.$inferSelect;
 export type Forum = typeof forumTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;

@@ -1,18 +1,18 @@
+import { type } from "arktype";
+import { eq } from "drizzle-orm";
+import { cookies } from "next/headers";
+import { decodeIdToken } from "arctic";
+import type { OAuth2Tokens } from "arctic";
+
 import {
   generateSessionToken,
   createSession,
   setSessionTokenCookie,
 } from "@/lib/session";
-import { type } from "arktype";
-import { google } from "@/lib/oauth";
-import { cookies } from "next/headers";
-import { decodeIdToken } from "arctic";
-import { nanoid } from "nanoid";
 
-import type { OAuth2Tokens } from "arctic";
 import { db } from "@/db";
-import { forumTable, userTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { google } from "@/lib/oauth";
+import { forumTable } from "@/db/schema";
 
 const Claims = type({
   sub: "string",
@@ -55,17 +55,15 @@ export async function GET(request: Request): Promise<Response> {
   }
   const claims = Claims(decodeIdToken(tokens.idToken()));
 
-  let email = ""; // for authentication only, this is not stored.
-  let authId = "";
+  let email = ""; // for forum assignment only, this is not stored.
 
   if (claims instanceof type.errors) {
     console.log(claims.summary);
   } else {
     email = claims.email;
-    authId = claims.sub;
   }
 
-  const isEduEmail = email.split("@")[1].includes(".edu");
+  const isEduEmail = email.split("@")[1].includes(".de");
 
   if (!isEduEmail) {
     console.log("Invalid email domain");
@@ -73,22 +71,6 @@ export async function GET(request: Request): Promise<Response> {
       status: 302,
       headers: {
         Location: "/login?error=invalid_email",
-      },
-    });
-  }
-
-  const userExists = await db.query.userTable.findFirst({
-    where: eq(userTable.authId, authId),
-  });
-
-  if (userExists) {
-    const sessionToken = generateSessionToken();
-    const session = await createSession(sessionToken, authId);
-    await setSessionTokenCookie(sessionToken, session.expiresAt);
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: "/forum",
       },
     });
   }
@@ -105,21 +87,13 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  const userId = nanoid();
-
-  await db.insert(userTable).values({
-    id: userId,
-    authId,
-    forumId,
-  });
-
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, userId);
+  const session = await createSession(sessionToken, forumId);
   setSessionTokenCookie(sessionToken, session.expiresAt);
   return new Response(null, {
     status: 302,
     headers: {
-      Location: "/feed",
+      Location: "/forum",
     },
   });
 }
