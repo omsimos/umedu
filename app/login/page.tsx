@@ -1,12 +1,7 @@
-"use client";
-
-import type React from "react";
-
 import Link from "next/link";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { LogInIcon, School, Shield, Info, AlertTriangle } from "lucide-react";
+
+import { getSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,30 +11,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Navbar } from "@/components/navbar";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Navbar } from "@/components/navbar";
+import { redirect } from "next/navigation";
 
-export default function Login() {
-  const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const searchParams = useSearchParams();
-  const hasInvalidEmailError = searchParams.get("error") === "invalid_email";
+type Props = {
+  searchParams: Promise<{ error: string }>;
+};
 
-  const handleSignInClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isAgeVerified) {
-      e.preventDefault();
-      toast.error("Age verification required", {
-        description: "You must confirm that you are 18 or older to continue.",
-        duration: 3000,
-      });
-    }
-  };
+export default async function Login({ searchParams }: Props) {
+  const { session } = await getSession();
+  const hasInvalidEmailError = (await searchParams).error === "invalid_email";
+
+  if (session) {
+    redirect("/forum");
+  }
 
   return (
     <>
       <Navbar />
-      <div className="container mx-auto px-4 py-8 max-w-md">
+      <form className="container mx-auto px-4 py-8 max-w-md">
         <Card className="w-full">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
@@ -101,24 +93,10 @@ export default function Login() {
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-start space-x-2">
-                <Checkbox
-                  id="age-verification"
-                  checked={isAgeVerified}
-                  onCheckedChange={(checked) =>
-                    setIsAgeVerified(checked === true)
-                  }
-                />
-                <label
-                  htmlFor="age-verification"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground"
-                >
-                  I confirm that I am 18 years of age or older.
-                </label>
-              </div>
-
               <p className="text-sm text-muted-foreground">
-                By signing in, you agree to our{" "}
+                By signing in, you confirm that you are{" "}
+                <span className="font-semibold">18 years of age</span> or older
+                and you agree to our{" "}
                 <Link href="/terms" className="text-primary hover:underline">
                   Terms of Service
                 </Link>{" "}
@@ -140,7 +118,6 @@ export default function Login() {
               <Link
                 href="/auth/google"
                 className="flex items-center justify-center gap-2"
-                onClick={handleSignInClick}
               >
                 <LogInIcon className="size-5" />
                 Sign in with Google
@@ -156,7 +133,7 @@ export default function Login() {
             </p>
           </CardFooter>
         </Card>
-      </div>
+      </form>
     </>
   );
 }
