@@ -7,7 +7,7 @@ export async function ForumHeader() {
   const { session } = await getSession();
 
   return (
-    <nav className="flex justify-between items-center mx-auto py-8">
+    <nav className="flex justify-between items-center w-full mx-auto py-8">
       <div className="flex items-center gap-2">
         <Link href="/" className="font-bold tracking-tighter">
           um<i>edu</i>

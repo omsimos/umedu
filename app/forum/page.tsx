@@ -1,7 +1,9 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { ForumHeader } from "./components/forum-header";
-import { MessageForm } from "./components/message-form";
+import { PostMessage } from "./components/PostMessage";
+import { HomeIcon, InfoIcon, LogOutIcon, SquareCodeIcon } from "lucide-react";
+import Link from "next/link";
 
 export default async function Forum() {
   const { session } = await getSession();
@@ -11,11 +13,26 @@ export default async function Forum() {
   }
 
   return (
-    <div className="container">
+    <div className="container flex flex-col justify-between h-screen">
       <ForumHeader />
       <section className="max-w-3xl mx-auto mt-8">
-        <MessageForm />
         <h1>hello, welcome to {session.forumId}</h1>
+      </section>
+
+      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-2xl mx-auto flex items-center justify-evenly">
+        <Link href="/">
+          <HomeIcon className="size-5" />
+        </Link>
+        <Link href="/about">
+          <InfoIcon className="size-5" />
+        </Link>
+        <PostMessage />
+        <Link href="https://github.com/joshxfi/umedu" target="_blank">
+          <SquareCodeIcon className="size-5" />
+        </Link>
+        <Link href="/about">
+          <LogOutIcon className="size-5" />
+        </Link>
       </section>
     </div>
   );
