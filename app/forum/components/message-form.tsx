@@ -6,6 +6,7 @@ import { SendHorizonalIcon } from "lucide-react";
 import { useAppForm } from "@/hooks/form";
 import { submitPost } from "@/actions/message";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const messageSchema = z.object({
   title: z
@@ -23,6 +24,19 @@ type Props = {
 };
 
 export function MessageForm({ onComplete }: Props) {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (values: { title: string; content: string }) => {
+      return submitPost(values);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success("Message posted successfully!");
+      onComplete?.();
+    },
+  });
+
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -33,9 +47,7 @@ export function MessageForm({ onComplete }: Props) {
     },
     onSubmit: async ({ value }) => {
       try {
-        await submitPost({ title: value.title, content: value.message });
-        toast.success("Message posted successfully!");
-        onComplete?.();
+        mutation.mutate({ title: value.title, content: value.message });
       } catch (error) {
         console.error("Error posting message:", error);
         toast.error("Failed to post message. Please try again.");
