@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "2b9fe10a-a63e-4c16-9358-1ae2427ec572",
+  "id": "b683985a-ed48-444c-a9dd-be1f7b8931df",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "forum": {

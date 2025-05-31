@@ -2,25 +2,8 @@
 "use client";
 
 import { z } from "zod";
-import { useState } from "react";
-import { SendHorizonalIcon, XIcon } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
+import { SendHorizonalIcon } from "lucide-react";
 import { useAppForm } from "@/hooks/form";
-import { Label } from "@/components/ui/label";
-
-const AVAILABLE_TAGS = [
-  "Academics",
-  "Campus Life",
-  "Events",
-  "Questions",
-  "Resources",
-  "Clubs",
-  "Sports",
-  "Career",
-  "Technology",
-  "Health",
-];
 
 const messageSchema = z.object({
   title: z
@@ -33,16 +16,6 @@ const messageSchema = z.object({
 });
 
 export function MessageForm() {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
-  const handleTagToggle = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
-    } else if (selectedTags.length < 3) {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
-
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -81,45 +54,13 @@ export function MessageForm() {
         )}
       />
 
-      <div className="space-y-2">
-        <Label className="h-7">Tags (select up to 3)</Label>
-        <div className="flex flex-wrap gap-2">
-          {AVAILABLE_TAGS.map((tag) => (
-            <Badge
-              key={tag}
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-              className="cursor-pointer"
-              onClick={() => handleTagToggle(tag)}
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </div>
-
-      {selectedTags.length > 0 && (
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Selected Tags:</label>
-          <div className="flex flex-wrap gap-2">
-            {selectedTags.map((tag) => (
-              <Badge key={tag} className="flex items-center gap-1">
-                {tag}
-                <XIcon
-                  className="h-3 w-3 cursor-pointer"
-                  onClick={() =>
-                    setSelectedTags(selectedTags.filter((t) => t !== tag))
-                  }
-                />
-              </Badge>
-            ))}
-          </div>
-        </div>
-      )}
-
       <div className="flex justify-end">
-      <form.AppForm>
-        <form.SubmitButton label="Post Anonymously" icon={SendHorizonalIcon} />
-      </form.AppForm>
+        <form.AppForm>
+          <form.SubmitButton
+            label="Post Anonymously"
+            icon={SendHorizonalIcon}
+          />
+        </form.AppForm>
       </div>
     </form>
   );

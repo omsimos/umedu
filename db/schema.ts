@@ -1,18 +1,9 @@
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const forumTable = sqliteTable("forum", {
   id: text("id").primaryKey(),
 });
-
-export const tagTable = sqliteTable("tag", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-});
-
-export const tagRelation = relations(tagTable, ({ many }) => ({
-  posts: many(postTable),
-}));
 
 export const postTable = sqliteTable("post", {
   id: text("id").primaryKey(),
@@ -34,5 +25,6 @@ export const sessionTable = sqliteTable("session", {
   }).notNull(),
 });
 
+export type Post = typeof postTable.$inferSelect;
 export type Forum = typeof forumTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
