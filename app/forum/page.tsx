@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { ForumHeader } from "./components/forum-header";
-import { PostMessage } from "./components/PostMessage";
+import { PostMessage } from "./components/post-message";
 import { HomeIcon, InfoIcon, LogOutIcon, SquareCodeIcon } from "lucide-react";
 import Link from "next/link";
 

@@ -4,6 +4,8 @@
 import { z } from "zod";
 import { SendHorizonalIcon } from "lucide-react";
 import { useAppForm } from "@/hooks/form";
+import { submitPost } from "@/actions/message";
+import { toast } from "sonner";
 
 const messageSchema = z.object({
   title: z
@@ -12,10 +14,15 @@ const messageSchema = z.object({
     .max(50, { message: "Title must not exceed 50 characters" }),
   message: z
     .string()
-    .max(2000, { message: "Caption must not exceed 2000 characters" }),
+    .min(10, { message: "Message must be at least 10 characters" })
+    .max(2000, { message: "Message must not exceed 2000 characters" }),
 });
 
-export function MessageForm() {
+type Props = {
+  onComplete?: () => void;
+};
+
+export function MessageForm({ onComplete }: Props) {
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -24,7 +31,16 @@ export function MessageForm() {
     validators: {
       onSubmit: messageSchema,
     },
-    onSubmit: async () => {},
+    onSubmit: async ({ value }) => {
+      try {
+        await submitPost({ title: value.title, content: value.message });
+        toast.success("Message posted successfully!");
+        onComplete?.();
+      } catch (error) {
+        console.error("Error posting message:", error);
+        toast.error("Failed to post message. Please try again.");
+      }
+    },
   });
 
   return (

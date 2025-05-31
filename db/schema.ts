@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const forumTable = sqliteTable("forum", {
@@ -6,13 +7,16 @@ export const forumTable = sqliteTable("forum", {
 });
 
 export const postTable = sqliteTable("post", {
-  id: text("id").primaryKey(),
+  id: text().$defaultFn(() => nanoid()),
   forumId: text("forum_id")
     .notNull()
     .references(() => forumTable.id),
   title: text("title").notNull(),
   content: text("content").notNull(),
   createdAt: text().default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text()
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdateFn(() => sql`(CURRENT_TIMESTAMP)`),
 });
 
 export const sessionTable = sqliteTable("session", {

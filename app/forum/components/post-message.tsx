@@ -39,7 +39,7 @@ export function PostMessage() {
             <DialogTitle>Post an Anonymous Message</DialogTitle>
             <DialogDescription>What&apos;s on your mind?</DialogDescription>
           </DialogHeader>
-          <MessageForm />
+          <MessageForm onComplete={() => setOpen(false)} />
         </DialogContent>
       </Dialog>
     );
@@ -58,7 +58,7 @@ export function PostMessage() {
           <DrawerDescription>What&apos;s on your mind?</DrawerDescription>
         </DrawerHeader>
         <div className="px-4">
-          <MessageForm />
+          <MessageForm onComplete={() => setOpen(false)} />
         </div>
       </DrawerContent>
     </Drawer>

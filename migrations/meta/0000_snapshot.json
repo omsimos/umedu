@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b683985a-ed48-444c-a9dd-be1f7b8931df",
+  "id": "6ae29312-b5d6-4e9f-b149-f2b388837385",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "forum": {
@@ -27,8 +27,8 @@
         "id": {
           "name": "id",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true,
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "forum_id": {
@@ -54,6 +54,14 @@
         },
         "createdAt": {
           "name": "createdAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

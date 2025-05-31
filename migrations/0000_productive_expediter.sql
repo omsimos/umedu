@@ -3,11 +3,12 @@ CREATE TABLE `forum` (
 );
 --> statement-breakpoint
 CREATE TABLE `post` (
-	`id` text PRIMARY KEY NOT NULL,
+	`id` text,
 	`forum_id` text NOT NULL,
 	`title` text NOT NULL,
 	`content` text NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP),
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP),
 	FOREIGN KEY (`forum_id`) REFERENCES `forum`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
