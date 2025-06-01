@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { Post } from "@/db/schema";
+import { AlertCircle } from "lucide-react";
 import { PostCard } from "./post-card";
+import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { Post } from "@/db/schema";
 
 export function Feed() {
   const {
@@ -25,7 +25,7 @@ export function Feed() {
 
   if (error) {
     return (
-      <div className="w-full max-w-2xl mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -38,7 +38,7 @@ export function Feed() {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-2xl mx-auto p-4 space-y-4">
+      <div className="w-full mx-auto p-4 space-y-4">
         <h1 className="text-2xl font-bold mb-6">Feed</h1>
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="space-y-3">
@@ -53,8 +53,7 @@ export function Feed() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Feed</h1>
+    <div className="w-full p-4">
       {posts && posts.length > 0 ? (
         <div className="space-y-4">
           {posts.map((post) => (

@@ -1,21 +1,16 @@
+import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
 import { Post } from "@/db/schema";
-import { Clock, MessageSquare } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { Calendar } from "lucide-react";
 
-interface Props {
+type Props = {
   post: Post;
-}
+};
 
 export function PostCard({ post }: Props) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return format(date, "MMM d, yyyy 'at' h:mm a");
   };
 
   const truncateContent = (content: string, maxLength = 200) => {
@@ -24,31 +19,22 @@ export function PostCard({ post }: Props) {
   };
 
   return (
-    <Card className="w-full hover:shadow-md transition-shadow duration-200">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-semibold leading-tight">
-            {post.title}
-          </CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <p className="text-muted-foreground mb-4 leading-relaxed">
-          {truncateContent(post.content)}
-        </p>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>{formatDate(post.createdAt ?? "")}</span>
-          </div>
-          {post.updatedAt !== post.createdAt && (
-            <div className="flex items-center gap-1">
-              <MessageSquare className="w-4 h-4" />
-              <span>Updated {formatDate(post.updatedAt ?? "")}</span>
-            </div>
-          )}
+    <Card>
+      <CardContent>
+        <CardTitle className="mb-2 leading-tight">
+          {post.title}
+        </CardTitle>
+        <div className="prose prose-sm min-w-0 break-words text-muted-foreground">
+          <p className="leading-relaxed">{truncateContent(post.content)}</p>
         </div>
       </CardContent>
+      <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
+      <CardFooter className="text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <Calendar className="w-3.5 h-3.5" />
+          <span>Posted {formatDate(post.createdAt ?? "")}</span>
+        </div>
+      </CardFooter>
     </Card>
   );
 }

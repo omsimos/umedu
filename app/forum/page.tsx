@@ -14,14 +14,14 @@ export default async function Forum() {
   }
 
   return (
-    <div className="container flex flex-col justify-between h-screen">
+    <div className="flex flex-col items-center min-h-screen">
       <ForumHeader />
-      <section className="max-w-3xl mx-auto mt-8">
-        <h1>hello, welcome to {session.forumId}</h1>
+
+      <section className="max-w-2xl flex flex-col justify-center mt-8 py-24 w-full">
         <Feed />
       </section>
 
-      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-2xl mx-auto flex items-center justify-evenly">
+      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-2xl mx-auto flex items-center justify-evenly fixed bottom-0 right-0 left-0">
         <Link href="/">
           <HomeIcon className="size-5" />
         </Link>
