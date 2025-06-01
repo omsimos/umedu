@@ -7,8 +7,8 @@ CREATE TABLE `post` (
 	`forum_id` text NOT NULL,
 	`title` text NOT NULL,
 	`content` text NOT NULL,
-	`createdAt` text DEFAULT (CURRENT_TIMESTAMP),
-	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP),
+	`created_at` integer DEFAULT (unixepoch()) NOT NULL,
+	`updated_at` integer,
 	FOREIGN KEY (`forum_id`) REFERENCES `forum`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint

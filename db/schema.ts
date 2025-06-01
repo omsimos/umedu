@@ -13,10 +13,10 @@ export const postTable = sqliteTable("post", {
     .references(() => forumTable.id),
   title: text("title").notNull(),
   content: text("content").notNull(),
-  createdAt: text().default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text()
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .$onUpdateFn(() => sql`(CURRENT_TIMESTAMP)`),
+  createdAt: integer("created_at", { mode: "number" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at").$onUpdate(() => sql`(unixepoch())`),
 });
 
 export const sessionTable = sqliteTable("session", {
