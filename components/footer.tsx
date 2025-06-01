@@ -9,7 +9,7 @@ export function Footer() {
         </span>{" "}
         by{" "}
         <Link href="https://www.instagram.com/josh.xfi/" target="_blank">
-          @joshxfi
+          @josh.xfi
         </Link>
       </div>
     </footer>

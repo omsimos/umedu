@@ -14,7 +14,7 @@ export default async function Forum() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
+    <div className="flex flex-col items-center">
       <ForumHeader />
 
       <section className="max-w-2xl flex flex-col justify-center mt-8 py-24 w-full">
