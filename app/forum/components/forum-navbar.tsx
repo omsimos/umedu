@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Badge } from "@/components/ui/badge";
 
-export async function ForumHeader() {
+export async function ForumNavbar() {
   const { session } = await getSession();
 
   return (

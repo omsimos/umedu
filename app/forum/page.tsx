@@ -1,23 +1,13 @@
-import { getSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { ForumHeader } from "./components/forum-header";
-import { PostMessage } from "./components/post-message";
-import { HomeIcon, InfoIcon, LogOutIcon, SquareCodeIcon } from "lucide-react";
 import Link from "next/link";
+import { HomeIcon, InfoIcon, LogOutIcon, SquareCodeIcon } from "lucide-react";
+
 import { Feed } from "./components/feed";
+import { PostMessage } from "./components/post-message";
 
 export default async function Forum() {
-  const { session } = await getSession();
-
-  if (!session) {
-    redirect("/");
-  }
-
   return (
     <div className="flex flex-col items-center">
-      <ForumHeader />
-
-      <section className="max-w-2xl flex flex-col justify-center mt-8 py-24 w-full">
+      <section className="max-w-2xl flex flex-col justify-center w-full">
         <Feed />
       </section>
 

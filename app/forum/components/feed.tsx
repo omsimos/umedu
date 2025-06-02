@@ -1,14 +1,16 @@
 "use client";
 
-import type { Post } from "@/db/schema";
+import Link from "next/link";
+import { useEffect } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { PostCard } from "./post-card";
+import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
+
+import type { Post } from "@/db/schema";
+import { PostCard } from "./post-card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
 
 type PostsResponse = {
   posts: Post[];
@@ -84,7 +86,9 @@ export function Feed() {
       {allPosts.length > 0 ? (
         <div className="space-y-4">
           {allPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <Link href={`/forum/${post.id}`} key={post.id} className="block">
+              <PostCard key={post.id} post={post} />
+            </Link>
           ))}
 
           <div ref={ref} className="h-10 flex items-center justify-center">
