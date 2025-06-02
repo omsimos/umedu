@@ -1,27 +1,53 @@
 "use client";
 
-import { Post } from "@/db/schema";
-import { AlertCircle } from "lucide-react";
+import type { Post } from "@/db/schema";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { PostCard } from "./post-card";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+
+type PostsResponse = {
+  posts: Post[];
+  nextCursor: string | null;
+};
 
 export function Feed() {
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
   const {
-    data: posts,
+    data,
     isLoading,
     error,
-  } = useQuery<Post[]>({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<PostsResponse>({
     queryKey: ["posts"],
-    queryFn: async () => {
-      const res = await fetch("/api/posts");
+    queryFn: async ({ pageParam }) => {
+      const url = pageParam ? `/api/posts?cursor=${pageParam}` : "/api/posts";
+
+      const res = await fetch(url);
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
       return res.json();
     },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (error) {
     return (
@@ -39,7 +65,6 @@ export function Feed() {
   if (isLoading) {
     return (
       <div className="w-full mx-auto p-4 space-y-4">
-        <h1 className="text-2xl font-bold mb-6">Feed</h1>
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="space-y-3">
             <Skeleton className="h-6 w-3/4" />
@@ -52,13 +77,41 @@ export function Feed() {
     );
   }
 
+  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
+
   return (
     <div className="w-full p-4">
-      {posts && posts.length > 0 ? (
+      {allPosts.length > 0 ? (
         <div className="space-y-4">
-          {posts.map((post) => (
+          {allPosts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
+
+          <div ref={ref} className="h-10 flex items-center justify-center">
+            {isFetchingNextPage && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Loading more posts...</span>
+              </div>
+            )}
+          </div>
+
+          {/* Manual load more button as fallback */}
+          {hasNextPage && !isFetchingNextPage && (
+            <div className="flex justify-center pt-4">
+              <Button onClick={() => fetchNextPage()} variant="outline">
+                Load More Posts
+              </Button>
+            </div>
+          )}
+
+          {!hasNextPage && allPosts.length > 0 && (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">
+                You&apos;ve reached the end!
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="text-center py-8">
