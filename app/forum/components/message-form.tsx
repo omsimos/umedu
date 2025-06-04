@@ -12,11 +12,11 @@ const messageSchema = z.object({
   title: z
     .string()
     .min(3, { message: "Title must be at least 3 characters" })
-    .max(50, { message: "Title must not exceed 50 characters" }),
+    .max(300, { message: "Title must not exceed 300 characters" }),
   message: z
     .string()
     .min(10, { message: "Message must be at least 10 characters" })
-    .max(2000, { message: "Message must not exceed 2000 characters" }),
+    .max(20000, { message: "Message must not exceed 20000 characters" }),
 });
 
 type Props = {

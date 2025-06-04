@@ -14,7 +14,7 @@ export default async function Page({ params }: Props) {
   return (
     <div className="w-full mx-auto p-4">
       <h2 className="text-lg font-semibold">{post.title}</h2>
-      <p className="text-muted-foreground text-sm">
+      <p className="text-muted-foreground text-sm mt-2">
         Posted at {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
       </p>
       <Separator className="my-4" />
