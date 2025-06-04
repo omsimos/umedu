@@ -13,7 +13,7 @@ export default async function Layout({
     redirect("/");
   }
   return (
-    <div className="py-24">
+    <div className="py-24 max-w-2xl mx-auto">
       <ForumNavbar />
       {children}
     </div>

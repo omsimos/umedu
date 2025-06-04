@@ -7,7 +7,7 @@ import { PostMessage } from "./components/post-message";
 export default async function Forum() {
   return (
     <div className="flex flex-col items-center">
-      <section className="max-w-2xl flex flex-col justify-center w-full">
+      <section className="flex flex-col justify-center w-full">
         <Feed />
       </section>
 

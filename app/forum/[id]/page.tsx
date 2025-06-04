@@ -1,6 +1,7 @@
+import { Separator } from "@/components/ui/separator";
 import { Post } from "@/db/schema";
+import { format, fromUnixTime } from "date-fns";
 import { notFound } from "next/navigation";
-import { PostCard } from "../components/post-card";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -12,7 +13,12 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="w-full mx-auto p-4">
-      <PostCard post={post} />
+      <h2 className="text-lg font-semibold">{post.title}</h2>
+      <p className="text-muted-foreground text-sm">
+        Posted at {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
+      </p>
+      <Separator className="my-4" />
+      <p className="font-medium text-secondary-foreground">{post.content}</p>
     </div>
   );
 }
