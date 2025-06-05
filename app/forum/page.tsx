@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { HomeIcon, InfoIcon, LogOutIcon, SquareCodeIcon } from "lucide-react";
+import { HomeIcon, InfoIcon, SquareCodeIcon } from "lucide-react";
 
+import { logout } from "@/actions/auth";
 import { Feed } from "./components/feed";
 import { PostMessage } from "./components/post-message";
+import { LogoutButton } from "./components/logout-button";
 
 export default async function Forum() {
   return (
@@ -22,9 +24,9 @@ export default async function Forum() {
         <Link href="https://github.com/joshxfi/umedu" target="_blank">
           <SquareCodeIcon className="size-5" />
         </Link>
-        <Link href="/about">
-          <LogOutIcon className="size-5" />
-        </Link>
+        <form action={logout}>
+          <LogoutButton />
+        </form>
       </section>
     </div>
   );
