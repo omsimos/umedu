@@ -8,10 +8,14 @@ export const db = drizzle({
     authToken: process.env.TURSO_AUTH_TOKEN!,
   },
   schema,
-  cache: upstashCache({
-    url: process.env.UPSTASH_URL!,
-    token: process.env.UPSTASH_TOKEN!,
-    global: true,
-    config: { ex: 60 },
-  }),
+  ...(process.env.NODE_ENV === "development"
+    ? {}
+    : {
+        cache: upstashCache({
+          url: process.env.UPSTASH_URL!,
+          token: process.env.UPSTASH_TOKEN!,
+          global: true,
+          config: { ex: 60 },
+        }),
+      }),
 });
