@@ -55,9 +55,7 @@ function TextareaField({
         {...props}
         id={field.name}
         value={field.state.value}
-        onChange={(e) =>
-          field.handleChange(e.target.value.replace(/\s+/g, " "))
-        }
+        onChange={(e) => field.handleChange(e.target.value)}
       />
       {field.state.meta.errors.length > 0 && (
         <p className="text-sm text-destructive mt-1">

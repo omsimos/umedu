@@ -1,7 +1,10 @@
-import { Separator } from "@/components/ui/separator";
-import { Post } from "@/db/schema";
-import { format, fromUnixTime } from "date-fns";
+import remarkGfm from "remark-gfm";
+import Markdown from "react-markdown";
 import { notFound } from "next/navigation";
+import { format, fromUnixTime } from "date-fns";
+
+import { Post } from "@/db/schema";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -15,10 +18,14 @@ export default async function Page({ params }: Props) {
     <div className="w-full mx-auto p-4">
       <h2 className="text-lg font-semibold">{post.title}</h2>
       <p className="text-muted-foreground text-sm mt-2">
-        Posted at {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
+        Posted at{" "}
+        {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
       </p>
       <Separator className="my-4" />
-      <p className="font-medium text-secondary-foreground">{post.content}</p>
+
+      <div className="prose dark:prose-invert font-medium">
+        <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
+      </div>
     </div>
   );
 }

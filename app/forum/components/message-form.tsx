@@ -76,6 +76,7 @@ export function MessageForm({ onComplete }: Props) {
         name="message"
         children={(field) => (
           <field.TextareaField
+            className="min-h-[200px]"
             label="Message"
             placeholder="What's on your mind? Your identity will remain anonymous."
           />

@@ -1,3 +1,5 @@
+import remarkGfm from "remark-gfm";
+import Markdown from "react-markdown";
 import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
 import { Post } from "@/db/schema";
 import { format, fromUnixTime } from "date-fns";
@@ -21,8 +23,10 @@ export function PostCard({ post }: Props) {
     <Card>
       <CardContent>
         <CardTitle className="mb-2 leading-tight">{post.title}</CardTitle>
-        <div className="prose prose-sm min-w-0 break-words text-muted-foreground">
-          <p className="leading-relaxed">{truncateContent(post.content)}</p>
+        <div className="min-w-0 break-words dark:prose-invert text-muted-foreground font-medium">
+          <Markdown remarkPlugins={[remarkGfm]}>
+            {truncateContent(post.content).replace(/\s+/g, " ")}
+          </Markdown>
         </div>
       </CardContent>
       <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />

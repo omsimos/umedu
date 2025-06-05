@@ -41,6 +41,8 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-intersection-observer": "^9.16.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
@@ -50,6 +52,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.17.57",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.6",
