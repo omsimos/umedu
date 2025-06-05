@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -40,7 +39,6 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Footer />
           </ThemeProvider>
         </Providers>
         <Toaster />

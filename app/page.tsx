@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AntennaIcon, GitPullRequestArrowIcon } from "lucide-react";
 
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -75,6 +76,8 @@ export default function Home() {
           </Alert>
         </section>
       </div>
+
+      <Footer />
     </>
   );
 }

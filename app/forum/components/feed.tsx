@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, MessageCircleDashedIcon } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
@@ -10,7 +10,7 @@ import type { Post } from "@/db/schema";
 import { PostCard } from "./post-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type PostsResponse = {
   posts: Post[];
@@ -118,9 +118,13 @@ export function Feed() {
           )}
         </div>
       ) : (
-        <div className="text-center py-8">
-          <p className="text-muted-foreground">No posts found.</p>
-        </div>
+        <Alert>
+          <MessageCircleDashedIcon />
+          <AlertTitle>No posts yet</AlertTitle>
+          <AlertDescription>
+            Start the conversation by creating a new post!
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   );
