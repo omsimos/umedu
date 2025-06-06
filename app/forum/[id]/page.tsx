@@ -6,6 +6,7 @@ import { format, fromUnixTime } from "date-fns";
 import { Post } from "@/db/schema";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "../components/forum-navbar";
+import { Footer } from "@/components/footer";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -16,7 +17,7 @@ export default async function Page({ params }: Props) {
   const post = await getPost(id);
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="mt-24">
       <ForumNavbar forumId={post.forumId} />
       <h2 className="text-lg font-semibold">{post.title}</h2>
       <p className="text-muted-foreground text-sm mt-2">
@@ -28,6 +29,8 @@ export default async function Page({ params }: Props) {
       <div className="prose dark:prose-invert font-medium">
         <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
       </div>
+
+      <Footer />
     </div>
   );
 }

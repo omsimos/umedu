@@ -17,14 +17,14 @@ export default async function Forum() {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mt-24">
       <ForumNavbar forumId={session.forumId} />
 
       <section className="flex flex-col justify-center w-full">
         <Feed />
       </section>
 
-      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-2xl mx-auto flex items-center justify-evenly fixed bottom-0 right-0 left-0">
+      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-xl mx-auto flex items-center justify-evenly fixed bottom-0 right-0 left-0">
         <Link href="/">
           <HomeIcon className="size-5" />
         </Link>

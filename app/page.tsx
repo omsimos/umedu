@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto flex items-center flex-col">
+      <div className="flex items-center flex-col">
         <h1 className="font-extrabold tracking-tighter text-8xl">
           um<i>edu</i>
         </h1>

@@ -53,7 +53,7 @@ export function Feed() {
 
   if (error) {
     return (
-      <div className="w-full mx-auto p-4">
+      <div className="w-full mx-auto">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -66,7 +66,7 @@ export function Feed() {
 
   if (isLoading) {
     return (
-      <div className="w-full mx-auto p-4 space-y-4">
+      <div className="w-full mx-auto space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="space-y-3">
             <Skeleton className="h-6 w-3/4" />
@@ -82,7 +82,7 @@ export function Feed() {
   const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   return (
-    <div className="w-full p-4">
+    <div>
       {allPosts.length > 0 ? (
         <div className="space-y-4">
           {allPosts.map((post) => (

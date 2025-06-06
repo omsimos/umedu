@@ -38,7 +38,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <main className="max-w-xl mx-auto container">{children}</main>
           </ThemeProvider>
         </Providers>
         <Toaster />
