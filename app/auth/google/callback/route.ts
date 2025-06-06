@@ -63,7 +63,7 @@ export async function GET(request: Request): Promise<Response> {
     email = claims.email;
   }
 
-  const isEduEmail = email.split("@")[1].includes(".de");
+  const isEduEmail = email.split("@")[1].includes(".edu");
 
   if (!isEduEmail) {
     console.log("Invalid email domain");
