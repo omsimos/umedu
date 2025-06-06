@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { HomeIcon, InfoIcon, SquareCodeIcon } from "lucide-react";
 
@@ -8,6 +9,13 @@ import { Feed } from "./components/feed";
 import { PostMessage } from "./components/post-message";
 import { LogoutButton } from "./components/logout-button";
 import { ForumNavbar } from "./components/forum-navbar";
+
+export const metadata: Metadata = {
+  title: "Umedu — Private Forum",
+  robots: {
+    index: false,
+  },
+};
 
 export default async function Forum() {
   const { session } = await getSession();

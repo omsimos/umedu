@@ -1,8 +1,13 @@
 import Link from "next/link";
+import { Metadata } from "next";
 import { GitPullRequestArrowIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+
+export const metadata: Metadata = {
+  title: "Umedu — About",
+};
 
 export default function Home() {
   return (
