@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { notFound } from "next/navigation";
@@ -7,6 +8,13 @@ import { Post } from "@/db/schema";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "../components/forum-navbar";
 import { Footer } from "@/components/footer";
+
+export const metadata: Metadata = {
+  title: "Umedu — Private Forum",
+  robots: {
+    index: false,
+  },
+};
 
 type Props = {
   params: Promise<{ id: string }>;

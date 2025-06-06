@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { LogInIcon, School, Shield, Info, AlertTriangle } from "lucide-react";
 
 import { getSession } from "@/lib/auth";
@@ -14,7 +16,10 @@ import {
 import { Navbar } from "@/components/navbar";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Umedu — Login",
+};
 
 type Props = {
   searchParams: Promise<{ error: string }>;
