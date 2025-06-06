@@ -1,83 +1,49 @@
 import Link from "next/link";
-import { AntennaIcon, GitPullRequestArrowIcon } from "lucide-react";
+import { AntennaIcon } from "lucide-react";
 
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { HighlightText } from "@/components/highlight-text";
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <div className="flex items-center flex-col">
-        <h1 className="font-extrabold tracking-tighter text-8xl">
-          um<i>edu</i>
-        </h1>
-        <p className="text-muted-foreground font-medium">
-          open-source, anonymous, private <i>edu</i> forums
-        </p>
+    <div className="min-h-screen flex flex-col justify-between">
+      <section>
+        <Navbar />
+        <div className="flex items-center flex-col">
+          <h1 className="font-extrabold tracking-tighter text-8xl">
+            um<i>edu</i>
+          </h1>
+          <p className="text-muted-foreground font-medium text-center">
+            open-source, anonymous, private <i>edu</i> forums
+          </p>
 
-        <Button asChild className="mt-4" variant="outline">
-          <Link href="/login">
-            Access your private channel <AntennaIcon />
-          </Link>
-        </Button>
+          <Button asChild className="mt-4" variant="outline">
+            <Link href="/login">
+              Access your private channel <AntennaIcon />
+            </Link>
+          </Button>
 
-        <section className="max-w-lg text-left mt-24 w-full space-y-12">
-          <div>
-            <h2 className="font-semibold border-b pb-2 text-3xl tracking-tight">
-              About the platform
-            </h2>
-            <p className="leading-7 mt-4 text-muted-foreground">
-              Umedu is a social platform that automatically creates encrypted
-              and private channels for students based on their <i>edu</i> email.
-              For example, if you authenticate with an email of{" "}
-              <code className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                hello@myschool.edu.ph
-              </code>{" "}
-              you will be able to access the{" "}
-              <code className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                myschool
-              </code>{" "}
-              channel.
-            </p>
+          <div className="leading-7 text-center mt-16 text-muted-foreground">
+            Fully <HighlightText>anonymous</HighlightText> and{" "}
+            <HighlightText>
+              <Link href="https://github.com/joshxfi/umedu" target="_blank">
+                open-source
+              </Link>
+            </HighlightText>
+            platform for students to connect with their peers based on their{" "}
+            <HighlightText>edu</HighlightText>
+            email. No personal information is stored, ensuring your privacy is
+            protected.{" "}
+            <Link href="/about" className="text-white">
+              Learn more &rarr;
+            </Link>
           </div>
-
-          <div>
-            <h2 className="font-semibold border-b pb-2 text-3xl tracking-tight">
-              Anonymity and privacy
-            </h2>
-            <p className="leading-7 mt-4 text-muted-foreground">
-              In order to protect the privacy of our users,{" "}
-              <strong>
-                we do not store your email or any personal information.
-              </strong>{" "}
-              Authenticating with your school email allows the platform to
-              create a session for your browser to access a private channel
-              based on your <i>edu</i> email.
-            </p>
-          </div>
-
-          <Alert className="mt-4">
-            <GitPullRequestArrowIcon className="h-4 w-4" />
-            <AlertDescription>
-              <p>
-                This platform is fully open-source. View source code on{" "}
-                <Link
-                  href="https://github.com/joshxfi/umedu"
-                  target="_blank"
-                  className="underline"
-                >
-                  GitHub.
-                </Link>
-              </p>
-            </AlertDescription>
-          </Alert>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <Footer />
-    </>
+    </div>
   );
 }
