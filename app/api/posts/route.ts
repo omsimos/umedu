@@ -1,9 +1,17 @@
-import { db } from "@/db";
-import { desc, lt, and, or, eq } from "drizzle-orm";
-import { postTable } from "@/db/schema";
 import type { NextRequest } from "next/server";
+import { desc, lt, and, or, eq } from "drizzle-orm";
+
+import { db } from "@/db";
+import { postTable } from "@/db/schema";
+import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
+  const { session } = await getSession();
+
+  if (!session) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const cursor = searchParams.get("cursor");
 
@@ -22,7 +30,7 @@ export async function GET(request: NextRequest) {
   const posts = await db
     .select()
     .from(postTable)
-    .where(cursorCondition)
+    .where(and(cursorCondition, eq(postTable.forumId, session?.forumId)))
     .limit(10)
     .orderBy(desc(postTable.createdAt), desc(postTable.id));
 
