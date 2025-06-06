@@ -63,7 +63,9 @@ export async function GET(request: Request): Promise<Response> {
     email = claims.email;
   }
 
-  const isEduEmail = email.split("@")[1].includes(".edu");
+  const isEduEmail =
+    email.split("@")[1].includes(".edu") ||
+    process.env.WHITELIST?.includes(email); // whitelisted emails are for testing purposes
 
   if (!isEduEmail) {
     console.log("Invalid email domain");
