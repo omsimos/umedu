@@ -25,17 +25,19 @@ export default async function Page({ params }: Props) {
   const post = await getPost(id);
 
   return (
-    <div className="mt-24">
-      <ForumNavbar forumId={post.forumId} />
-      <h2 className="text-lg font-semibold">{post.title}</h2>
-      <p className="text-muted-foreground text-sm mt-2">
-        Posted at{" "}
-        {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
-      </p>
-      <Separator className="my-4" />
+    <div className="min-h-screen flex flex-col justify-between">
+      <div>
+        <ForumNavbar forumId={post.forumId} />
+        <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
+        <p className="text-muted-foreground text-sm mt-2">
+          Posted at{" "}
+          {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
+        </p>
+        <Separator className="my-4" />
 
-      <div className="prose dark:prose-invert font-medium">
-        <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
+        <div className="prose dark:prose-invert font-medium">
+          <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
+        </div>
       </div>
 
       <Footer />
