@@ -1,14 +1,25 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { HomeIcon, InfoIcon, SquareCodeIcon } from "lucide-react";
 
+import { getSession } from "@/lib/auth";
 import { logout } from "@/actions/auth";
 import { Feed } from "./components/feed";
 import { PostMessage } from "./components/post-message";
 import { LogoutButton } from "./components/logout-button";
+import { ForumNavbar } from "./components/forum-navbar";
 
 export default async function Forum() {
+  const { session } = await getSession();
+
+  if (!session) {
+    redirect("/");
+  }
+
   return (
     <div className="flex flex-col items-center">
+      <ForumNavbar forumId={session.forumId} />
+
       <section className="flex flex-col justify-center w-full">
         <Feed />
       </section>

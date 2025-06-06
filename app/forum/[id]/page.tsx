@@ -5,6 +5,7 @@ import { format, fromUnixTime } from "date-fns";
 
 import { Post } from "@/db/schema";
 import { Separator } from "@/components/ui/separator";
+import { ForumNavbar } from "../components/forum-navbar";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -16,6 +17,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="w-full mx-auto p-4">
+      <ForumNavbar forumId={post.forumId} />
       <h2 className="text-lg font-semibold">{post.title}</h2>
       <p className="text-muted-foreground text-sm mt-2">
         Posted at{" "}
