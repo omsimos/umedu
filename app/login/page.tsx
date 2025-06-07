@@ -36,7 +36,7 @@ export default async function Login({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <form className="container mx-auto px-4 py-8 max-w-md">
+      <form className="mx-auto max-w-md mt-8">
         <Card className="w-full">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
@@ -110,8 +110,9 @@ export default async function Login({ searchParams }: Props) {
                   href="/guidelines"
                   className="text-primary hover:underline"
                 >
-                  Community Guidelines.
+                  Community Guidelines
                 </Link>
+                .
               </p>
             </div>
 
