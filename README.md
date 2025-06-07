@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## About the platform
+**[Umedu](https://umedu.omsimos.com)** is a social platform that automatically creates private forums for students based on their _.edu_ email address. For example, if you authenticate with an email like `hello@myschool.edu.ph`, you’ll be able to access the `myschool` private forum.
 
-## Getting Started
+## Anonymity and privacy
 
-First, run the development server:
+To protect the privacy of our users, **we do not store your email address or any personal information.** Authenticating with your school email simply creates a session in your browser that grants access to a private forum based on your _.edu_ email domain.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Contributing
+
+If you like this project, please consider giving it a star! ✨ If you wish to suggest or work on a new feature, please open an issue to discuss with the community and the project maintainers. We appreciate your interest and look forward to collaborating with you!
+
+### Tech Stack
+
+TypeScript, Next.js (RSC, Server Actions, & Route Handlers), Tailwind CSS, TanStack Query, Drizzle ORM, libSQL
+
+### Prerequisites
+
+- [Turso CLI](https://docs.turso.tech/cli/installation) (for local libSQL server)
+- Node.js >= 20
+- Bun (package manager)
+
+### Install Dependencies
+
+If you're using `nvm`, you can easily switch to the required Node.js version.
+```sh
+$ nvm use 20 # ignore if you're already on Node.js >= 20
+$ bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
+```env
+# .env
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+NEXT_PUBLIC_APP_URL=http://localhost:3000 # For using fetch with RSC
+TURSO_CONNECTION_URL=http://127.0.0.1:8080
+WHITELIST=your@email.com # If you don't have a .edu email
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You must setup your own Google OAuth client. [Setting up OAuth 2.0 &rarr;](https://support.google.com/cloud/answer/6158849)
+```env
+# .env
 
-## Learn More
+GOOGLE_CLIENT_ID=YOUR_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_CLIENT_SECRET
+GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Development Server
+```sh
+$ bun dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Setup Database
+Running a development server will also run a local `libSQL` server and create a database for you. Run the migration command below to apply the schema.
+```sh
+$ bun db:migrate
+$ bun db:studio # To explore your database (optional)
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Running Build
+After making changes, you can run a build which will check for lint and type errors.
+```sh
+$ bun run build
+```
 
-## Deploy on Vercel
+Once ready, you can submit a pull request for review.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+This repository is licensed under the [GPL-3.0 License](https://github.com/joshxfi/umedu/blob/main/LICENSE).

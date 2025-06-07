@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 const title =
-  "Umedu – Private Student Forums via .edu Email | Secure & Anonymous Social Platform";
+  "Umedu – Private Student Forums | Secure & Anonymous Social Platform";
 
 const description =
   "Umedu is a secure and anonymous social platform that automatically creates private forums for students using their .edu email. Join your school's exclusive space—no personal info stored.";
