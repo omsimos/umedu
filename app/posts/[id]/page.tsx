@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 import { format, fromUnixTime } from "date-fns";
 
 import { Post } from "@/db/schema";
-import { Separator } from "@/components/ui/separator";
-import { ForumNavbar } from "../components/forum-navbar";
 import { Footer } from "@/components/footer";
+import { Separator } from "@/components/ui/separator";
+import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 
 export const metadata: Metadata = {
   robots: {

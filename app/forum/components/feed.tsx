@@ -86,7 +86,7 @@ export function Feed() {
       {allPosts.length > 0 ? (
         <div className="space-y-4">
           {allPosts.map((post) => (
-            <Link href={`/forum/${post.id}`} key={post.id} className="block">
+            <Link href={`/posts/${post.id}`} key={post.id} className="block">
               <PostCard key={post.id} post={post} />
             </Link>
           ))}
