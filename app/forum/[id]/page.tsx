@@ -10,7 +10,6 @@ import { ForumNavbar } from "../components/forum-navbar";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-  title: "Umedu — Private Forum",
   robots: {
     index: false,
   },
@@ -24,14 +23,17 @@ export default async function Page({ params }: Props) {
   const { id } = await params;
   const post = await getPost(id);
 
+  const formatDate = (date: number) => {
+    return format(fromUnixTime(date), "MMM d, yyyy 'at' h:mm a");
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
         <ForumNavbar forumId={post.forumId} />
         <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
         <p className="text-muted-foreground text-sm mt-2">
-          Posted at{" "}
-          {format(fromUnixTime(post.createdAt), "MMM d, yyyy 'at' h:mm a")}
+          Posted at {formatDate(post.createdAt)}
         </p>
         <Separator className="my-4" />
 
