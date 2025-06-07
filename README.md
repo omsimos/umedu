@@ -1,10 +1,11 @@
 ## About the platform
-
 **[Umedu](https://umedu.omsimos.com)** is a social platform that automatically creates private forums for students based on their _.edu_ email address. For example, if you authenticate with an email like `hello@myschool.edu.ph`, you’ll be able to access the `myschool` private forum.
 
 ## Anonymity and privacy
 
 To protect the privacy of our users, **we do not store your email address or any personal information.** Authenticating with your school email simply creates a session in your browser that grants access to a private forum based on your _.edu_ email domain.
+
+---
 
 ## Contributing
 
@@ -65,3 +66,8 @@ $ bun run build
 ```
 
 Once ready, you can submit a pull request for review.
+
+---
+
+## License
+This repository is licensed under the [GPL-3.0 License](https://github.com/joshxfi/umedu/blob/main/LICENSE).
