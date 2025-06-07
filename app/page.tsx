@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AntennaIcon } from "lucide-react";
+import { MessageSquareTextIcon } from "lucide-react";
 
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -21,19 +21,33 @@ export default function Home() {
 
           <Button asChild className="mt-4" variant="outline">
             <Link href="/login">
-              Access your private channel <AntennaIcon />
+              Access your private forum <MessageSquareTextIcon />
             </Link>
           </Button>
 
           <div className="leading-7 text-center mt-16 text-muted-foreground">
-            Fully <HighlightText>anonymous</HighlightText> and{" "}
+            Fully{" "}
             <HighlightText>
-              <Link href="https://github.com/joshxfi/umedu" target="_blank">
+              <Link className="hover:text-primary transition-all" href="/about">
+                anonymous
+              </Link>
+            </HighlightText>{" "}
+            and{" "}
+            <HighlightText>
+              <Link
+                className="hover:text-primary transition-all"
+                href="https://github.com/joshxfi/umedu"
+                target="_blank"
+              >
                 open-source
               </Link>
             </HighlightText>
             platform for students to connect with their peers based on their{" "}
-            <HighlightText>edu</HighlightText>
+            <HighlightText>
+              <Link className="hover:text-primary transition-all" href="/login">
+                edu
+              </Link>
+            </HighlightText>
             email. No personal information is stored, ensuring your privacy is
             protected.{" "}
             <Link href="/about" className="text-white">
