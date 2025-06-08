@@ -1,14 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
-import { AlertCircle, Loader2, MessageCircleDashedIcon } from "lucide-react";
-import { useInView } from "react-intersection-observer";
+import { useEffect, useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { AlertCircle, MessageCircleDashedIcon } from "lucide-react";
 
 import type { Post } from "@/db/schema";
 import { PostCard } from "./post-card";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -18,17 +18,13 @@ type PostsResponse = {
 };
 
 export function Feed() {
-  const { ref, inView } = useInView({
-    threshold: 0,
-    rootMargin: "100px",
-  });
-
   const {
     data,
     isLoading,
     error,
     fetchNextPage,
     hasNextPage,
+    isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery<PostsResponse>({
     queryKey: ["posts"],
@@ -45,11 +41,39 @@ export function Feed() {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
+  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
+
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const rowVirtualizer = useVirtualizer({
+    count: hasNextPage ? allPosts.length + 1 : allPosts.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 220,
+    gap: 10,
+    paddingEnd: 100,
+  });
+
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+
+    if (!lastItem) {
+      return;
+    }
+
+    if (
+      lastItem.index >= allPosts.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [
+    hasNextPage,
+    fetchNextPage,
+    allPosts.length,
+    isFetchingNextPage,
+    rowVirtualizer.getVirtualItems(),
+  ]);
 
   if (error) {
     return (
@@ -79,45 +103,9 @@ export function Feed() {
     );
   }
 
-  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
-
   return (
-    <div>
-      {allPosts.length > 0 ? (
-        <div className="space-y-4">
-          {allPosts.map((post) => (
-            <Link href={`/posts/${post.id}`} key={post.id} className="block">
-              <PostCard key={post.id} post={post} />
-            </Link>
-          ))}
-
-          <div ref={ref} className="h-10 flex items-center justify-center">
-            {isFetchingNextPage && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Loading more posts...</span>
-              </div>
-            )}
-          </div>
-
-          {/* Manual load more button as fallback */}
-          {hasNextPage && !isFetchingNextPage && (
-            <div className="flex justify-center pt-4">
-              <Button onClick={() => fetchNextPage()} variant="outline">
-                Load More Posts
-              </Button>
-            </div>
-          )}
-
-          {!hasNextPage && allPosts.length > 0 && (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">
-                You&apos;ve reached the end!
-              </p>
-            </div>
-          )}
-        </div>
-      ) : (
+    <div ref={parentRef} className="h-[700px] w-full overflow-auto">
+      {allPosts.length === 0 && !isFetching && (
         <Alert>
           <MessageCircleDashedIcon />
           <AlertTitle>No posts yet</AlertTitle>
@@ -126,6 +114,50 @@ export function Feed() {
           </AlertDescription>
         </Alert>
       )}
+
+      <div
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const isLoaderRow = virtualRow.index > allPosts.length - 1;
+          const post = allPosts[virtualRow.index];
+
+          return (
+            <div
+              key={virtualRow.index}
+              className={virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              {isLoaderRow ? (
+                hasNextPage ? (
+                  "Loading more..."
+                ) : (
+                  "Nothing more to load"
+                )
+              ) : (
+                <Link
+                  href={`/posts/${post.id}`}
+                  key={post.id}
+                  className="block"
+                >
+                  <PostCard key={post.id} post={post} />
+                </Link>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
