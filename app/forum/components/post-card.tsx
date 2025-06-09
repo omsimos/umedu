@@ -14,13 +14,13 @@ export function PostCard({ post }: Props) {
     return format(fromUnixTime(date), "MMM d, yyyy 'at' h:mm a");
   };
 
-  const truncateContent = (content: string, maxLength = 200) => {
+  const truncateContent = (content: string, maxLength = 100) => {
     if (content.length <= maxLength) return content;
     return content.slice(0, maxLength) + "...";
   };
 
   return (
-    <Card>
+    <Card className="h-[220px] w-full justify-between">
       <CardContent>
         <CardTitle className="mb-2 leading-tight">{post.title}</CardTitle>
         <div className="min-w-0 break-words dark:prose-invert text-muted-foreground font-medium">
@@ -29,13 +29,16 @@ export function PostCard({ post }: Props) {
           </Markdown>
         </div>
       </CardContent>
-      <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
-      <CardFooter className="text-xs text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Calendar className="w-3.5 h-3.5" />
-          <span>Posted {formatDate(post.createdAt)}</span>
-        </div>
-      </CardFooter>
+
+      <div className="space-y-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
+        <CardFooter className="text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Posted {formatDate(post.createdAt)}</span>
+          </div>
+        </CardFooter>
+      </div>
     </Card>
   );
 }

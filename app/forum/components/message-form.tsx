@@ -2,10 +2,11 @@
 "use client";
 
 import { z } from "zod";
+import { toast } from "sonner";
 import { SendHorizonalIcon } from "lucide-react";
+
 import { useAppForm } from "@/hooks/form";
 import { submitPost } from "@/actions/message";
-import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const messageSchema = z.object({
@@ -34,6 +35,10 @@ export function MessageForm({ onComplete }: Props) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success("Message posted successfully!");
       onComplete?.();
+    },
+    onError: (error) => {
+      console.error("Error posting message:", error);
+      toast.error("Failed to post message. Please try again.");
     },
   });
 
@@ -86,6 +91,7 @@ export function MessageForm({ onComplete }: Props) {
       <div className="flex justify-end">
         <form.AppForm>
           <form.SubmitButton
+            disabled={mutation.isPending}
             label="Post Anonymously"
             icon={SendHorizonalIcon}
           />
