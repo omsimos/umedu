@@ -10,6 +10,7 @@ import { AlertCircle, MessageCircleDashedIcon } from "lucide-react";
 import type { Post } from "@/db/schema";
 import { PostCard } from "./post-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type PostsResponse = {
@@ -92,12 +93,26 @@ export function Feed() {
     return (
       <div className="w-full mx-auto space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="space-y-3">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-4 w-1/3" />
-          </div>
+          <Card key={i} className="h-[220px] w-full justify-between">
+            <CardContent>
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-4/5" />
+              </div>
+            </CardContent>
+
+            <div className="space-y-6">
+              <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
+              <CardFooter className="text-xs">
+                <div className="flex items-center gap-1">
+                  <Skeleton className="w-3.5 h-3.5 rounded-full" />
+                  <Skeleton className="h-3 w-32" />
+                </div>
+              </CardFooter>
+            </div>
+          </Card>
         ))}
       </div>
     );
