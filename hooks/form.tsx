@@ -69,6 +69,7 @@ function TextareaField({
 function SubmitButton({
   label,
   icon,
+  disabled,
   ...props
 }: { label: string; icon?: LucideIcon } & React.ComponentProps<"button">) {
   const form = useFormContext();
@@ -76,9 +77,9 @@ function SubmitButton({
   return (
     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
       {([canSubmit, isSubmitting]) => (
-        <Button disabled={isSubmitting || !canSubmit} {...props}>
+        <Button disabled={isSubmitting || !canSubmit || disabled} {...props}>
           {label}
-          <LoadingIcon icon={icon} loading={isSubmitting} />
+          <LoadingIcon icon={icon} loading={isSubmitting || !!disabled} />
         </Button>
       )}
     </form.Subscribe>

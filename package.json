@@ -14,7 +14,7 @@
     "db:seed": "bun seed.ts"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.8",
+    "@libsql/client": "^0.15.9",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@radix-ui/react-accordion": "^1.2.11",
