@@ -45,7 +45,7 @@ export default function Home() {
             platform for students to connect with their peers based on their{" "}
             <HighlightText>
               <Link className="hover:text-primary transition-all" href="/login">
-                edu
+                .edu
               </Link>
             </HighlightText>
             email. No personal information is stored, ensuring your privacy is
