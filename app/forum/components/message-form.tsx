@@ -1,7 +1,7 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import { z } from "zod";
+import { z } from "zod/v4";
 import { toast } from "sonner";
 import { SendHorizonalIcon } from "lucide-react";
 
@@ -11,12 +11,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const messageSchema = z.object({
   title: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters" })
-    .max(300, { message: "Title must not exceed 300 characters" }),
+    .min(3, { error: "Title must be at least 3 characters" })
+    .max(300, { error: "Title must not exceed 300 characters" }),
   message: z
     .string()
-    .min(10, { message: "Message must be at least 10 characters" })
-    .max(20000, { message: "Message must not exceed 20000 characters" }),
+    .min(10, { error: "Message must be at least 10 characters" })
+    .max(20000, { error: "Message must not exceed 20000 characters" }),
 });
 
 type Props = {

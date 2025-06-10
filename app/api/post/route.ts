@@ -1,5 +1,4 @@
-import { z } from "zod";
-
+import { z } from "zod/v4";
 import { db } from "@/db";
 import { getSession } from "@/lib/auth";
 import { postTable } from "@/db/schema";
@@ -10,14 +9,20 @@ const postSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { title, content } = postSchema.parse(body);
-
   const { session } = await getSession();
 
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const body = await req.json();
+  const params = postSchema.safeParse(body);
+
+  if (!params.success) {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const { title, content } = params.data;
 
   try {
     await db.insert(postTable).values({

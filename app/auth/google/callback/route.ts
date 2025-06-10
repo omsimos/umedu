@@ -1,4 +1,4 @@
-import { type } from "arktype";
+import { z } from "zod/v4";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { decodeIdToken } from "arctic";
@@ -14,9 +14,9 @@ import { db } from "@/db";
 import { google } from "@/lib/oauth";
 import { forumTable } from "@/db/schema";
 
-const Claims = type({
-  sub: "string",
-  email: "string",
+const claimsSchema = z.object({
+  sub: z.string(),
+  email: z.email(),
 });
 
 export async function GET(request: Request): Promise<Response> {
@@ -53,15 +53,16 @@ export async function GET(request: Request): Promise<Response> {
       status: 400,
     });
   }
-  const claims = Claims(decodeIdToken(tokens.idToken()));
+  const claims = claimsSchema.safeParse(decodeIdToken(tokens.idToken()));
 
-  let email = ""; // for forum assignment only, this is not stored.
-
-  if (claims instanceof type.errors) {
-    console.log(claims.summary);
-  } else {
-    email = claims.email;
+  if (!claims.success) {
+    console.log("Invalid ID token claims");
+    return new Response(null, {
+      status: 400,
+    });
   }
+
+  const email = claims.data.email; // for forum assignment only, this is not stored.
 
   const isEduEmail =
     email.split("@")[1].includes(".edu") ||
