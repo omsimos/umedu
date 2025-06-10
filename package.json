@@ -26,10 +26,9 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-form": "^1.12.2",
     "@tanstack/react-query": "^5.80.6",
-    "@tanstack/react-virtual": "^3.13.9",
+    "@tanstack/react-virtual": "^3.13.10",
     "@upstash/redis": "^1.35.0",
     "arctic": "^3.7.0",
-    "arktype": "^2.1.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -48,14 +47,14 @@
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "zod": "^3.25.56"
+    "zod": "^3.25.57"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.8",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.19.0",
-    "@types/react": "^19.1.6",
+    "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
     "drizzle-kit": "^0.31.1",
     "eslint": "^9.28.0",
