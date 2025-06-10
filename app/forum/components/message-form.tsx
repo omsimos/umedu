@@ -28,7 +28,7 @@ export function MessageForm({ onComplete }: Props) {
 
   const mutation = useMutation({
     mutationFn: (values: { title: string; content: string }) => {
-      return fetch("/api/post", {
+      return fetch("/api/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
