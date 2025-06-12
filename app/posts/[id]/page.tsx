@@ -48,15 +48,12 @@ export default async function Page({ params }: Props) {
 }
 
 async function getPost(id: string): Promise<Post> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/posts/${id}`,
-    {
-      cache: "force-cache",
-      next: {
-        tags: [`post-${id}`],
-      },
+  const res = await fetch(`${process.env.APP_URL}/api/posts/${id}`, {
+    cache: "force-cache",
+    next: {
+      tags: [`post-${id}`],
     },
-  );
+  });
 
   if (!res.ok) notFound();
 
