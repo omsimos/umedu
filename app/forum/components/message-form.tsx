@@ -4,65 +4,47 @@
 import { z } from "zod/v4";
 import { toast } from "sonner";
 import { SendHorizonalIcon } from "lucide-react";
-
+import { useMutation } from "@tanstack/react-query";
 import { useAppForm } from "@/hooks/form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const messageSchema = z.object({
   title: z
     .string()
     .min(3, { error: "Title must be at least 3 characters" })
     .max(300, { error: "Title must not exceed 300 characters" }),
-  message: z
+  content: z
     .string()
     .min(10, { error: "Message must be at least 10 characters" })
     .max(20000, { error: "Message must not exceed 20000 characters" }),
 });
 
 type Props = {
-  onComplete?: () => void;
+  handleAddPost: (value: {
+    title: string;
+    content: string;
+  }) => Promise<Promise<void> | undefined>;
 };
 
-export function MessageForm({ onComplete }: Props) {
-  const queryClient = useQueryClient();
-
+export function MessageForm({ handleAddPost }: Props) {
   const mutation = useMutation({
-    mutationFn: (values: { title: string; content: string }) => {
-      return fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: values.title,
-          content: values.content,
-        }),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      toast.success("Message posted successfully!");
-      onComplete?.();
-    },
-    onError: (error) => {
-      console.error("Error posting message:", error);
-      toast.error("Failed to post message. Please try again.");
+    mutationFn: async (value: { title: string; content: string }) => {
+      await handleAddPost(value);
     },
   });
 
   const form = useAppForm({
     defaultValues: {
       title: "",
-      message: "",
+      content: "",
     },
     validators: {
       onSubmit: messageSchema,
     },
     onSubmit: async ({ value }) => {
       try {
-        mutation.mutate({ title: value.title, content: value.message });
+        await mutation.mutateAsync(value);
       } catch (error) {
-        console.error("Error posting message:", error);
+        console.error("Error submitting message:", error);
         toast.error("Failed to post message. Please try again.");
       }
     },
@@ -86,7 +68,7 @@ export function MessageForm({ onComplete }: Props) {
         )}
       />
       <form.AppField
-        name="message"
+        name="content"
         children={(field) => (
           <field.TextareaField
             className="min-h-[200px]"

@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useCallback, useState } from "react";
+import { MessageCirclePlusIcon } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { asyncRateLimit } from "@tanstack/react-pacer/async-rate-limiter";
+
 import {
   Dialog,
   DialogContent,
@@ -19,12 +22,38 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { addPost } from "@/actions/post";
 import { MessageForm } from "./message-form";
-import { MessageCirclePlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export function PostMessage() {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const queryClient = useQueryClient();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const rateLimitedAddPost = useCallback(
+    asyncRateLimit(
+      async (value: { title: string; content: string }) => {
+        await addPost(value);
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
+        toast.success("Message posted successfully!");
+        setOpen(false);
+      },
+      {
+        limit: 2, // max 2 requests
+        window: 1000 * 60, // per minute
+        onReject: (rateLimiter) => {
+          console.warn("Rate limit exceeded. Please try again later.");
+          toast.error(
+            `You are posting too frequently. Try again in ${Math.ceil(rateLimiter.getMsUntilNextWindow() / 1000)} seconds.`,
+          );
+        },
+      },
+    ),
+    [],
+  );
 
   if (isDesktop) {
     return (
@@ -39,7 +68,7 @@ export function PostMessage() {
             <DialogTitle>Post an Anonymous Message</DialogTitle>
             <DialogDescription>What&apos;s on your mind?</DialogDescription>
           </DialogHeader>
-          <MessageForm onComplete={() => setOpen(false)} />
+          <MessageForm handleAddPost={rateLimitedAddPost} />
         </DialogContent>
       </Dialog>
     );
@@ -58,7 +87,7 @@ export function PostMessage() {
           <DrawerDescription>What&apos;s on your mind?</DrawerDescription>
         </DrawerHeader>
         <div className="px-4">
-          <MessageForm onComplete={() => setOpen(false)} />
+          <MessageForm handleAddPost={rateLimitedAddPost} />
         </div>
       </DrawerContent>
     </Drawer>
