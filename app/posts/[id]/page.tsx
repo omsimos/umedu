@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer";
 import { formatUnixDate } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
+import { ShareButton } from "./components/share-button";
 
 export const metadata: Metadata = {
   robots: {
@@ -26,11 +27,21 @@ export default async function Page({ params }: Props) {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <ForumNavbar forumId={post.forumId} />
-        <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
-        <p className="text-muted-foreground text-sm mt-2">
-          Posted at {formatUnixDate(post.createdAt)}
-        </p>
+        <ForumNavbar
+          forumId={post.forumId}
+          renderButtons={() => (
+            <ShareButton title={post.title} content={post.content} />
+          )}
+        />
+        <div>
+          <div>
+            <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
+            <p className="text-muted-foreground text-sm mt-2">
+              Posted at {formatUnixDate(post.createdAt)}
+            </p>
+          </div>
+        </div>
+
         <Separator className="my-4" />
 
         <div className="prose dark:prose-invert font-medium">
