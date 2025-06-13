@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { notFound } from "next/navigation";
-import { format, fromUnixTime } from "date-fns";
 
 import { Post } from "@/db/schema";
 import { Footer } from "@/components/footer";
+import { formatUnixDate } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 
@@ -23,17 +23,13 @@ export default async function Page({ params }: Props) {
   const { id } = await params;
   const post = await getPost(id);
 
-  const formatDate = (date: number) => {
-    return format(fromUnixTime(date), "MMM d, yyyy 'at' h:mm a");
-  };
-
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
         <ForumNavbar forumId={post.forumId} />
         <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
         <p className="text-muted-foreground text-sm mt-2">
-          Posted at {formatDate(post.createdAt)}
+          Posted at {formatUnixDate(post.createdAt)}
         </p>
         <Separator className="my-4" />
 
