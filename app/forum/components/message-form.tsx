@@ -2,6 +2,7 @@
 "use client";
 
 import { z } from "zod/v4";
+import { toast } from "sonner";
 import { SendHorizonalIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useAppForm } from "@/hooks/form";
@@ -40,7 +41,12 @@ export function MessageForm({ handleAddPost }: Props) {
       onSubmit: messageSchema,
     },
     onSubmit: async ({ value }) => {
-      await mutation.mutateAsync(value);
+      try {
+        await mutation.mutateAsync(value);
+      } catch (error) {
+        console.error("Error submitting message:", error);
+        toast.error("Failed to post message. Please try again.");
+      }
     },
   });
 
