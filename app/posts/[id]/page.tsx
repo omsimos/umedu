@@ -29,9 +29,7 @@ export default async function Page({ params }: Props) {
       <div>
         <ForumNavbar
           forumId={post.forumId}
-          renderButtons={() => (
-            <ShareButton title={post.title} content={post.content} />
-          )}
+          renderButtons={() => <ShareButton title={post.title} />}
         />
         <div>
           <div>

@@ -2,22 +2,19 @@
 
 import { Share2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { truncateContent } from "@/lib/utils";
 import { toast } from "sonner";
 
 type Props = {
   title: string;
-  content: string;
 };
 
-export function ShareButton({ title, content }: Props) {
+export function ShareButton({ title }: Props) {
   const share = async () => {
     if (typeof window !== "undefined") {
       const url = window.location.href;
       const shareData: ShareData = {
         title,
         url,
-        text: truncateContent(content),
       };
 
       try {
