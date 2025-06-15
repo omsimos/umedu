@@ -42,14 +42,16 @@ function TextField({
 
 function TextareaField({
   label,
+  isRequired,
   ...props
-}: { label: string } & React.ComponentProps<"textarea">) {
+}: { label: string; isRequired?: boolean } & React.ComponentProps<"textarea">) {
   const field = useFieldContext<string>();
 
   return (
     <div>
       <Label htmlFor={field.name} className="h-7">
         {label}
+        {isRequired && <span className="text-destructive">*</span>}
       </Label>
       <Textarea
         {...props}
