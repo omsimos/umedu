@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { HomeIcon, InfoIcon, SquareCodeIcon } from "lucide-react";
+import {
+  HomeIcon,
+  InfoIcon,
+  MessageCirclePlusIcon,
+  SquareCodeIcon,
+} from "lucide-react";
 
 import { logout } from "@/actions/auth";
 import { getSession } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 import { ForumNavbar } from "./components/forum-navbar";
-import { PostMessage } from "./components/post-message";
 import { LogoutButton } from "./components/logout-button";
 
 export const metadata: Metadata = {
@@ -40,7 +45,11 @@ export default async function ForumLayout({
         <Link href="/about">
           <InfoIcon className="size-5" />
         </Link>
-        <PostMessage />
+        <Button asChild size="icon">
+          <Link href="/forum/submit">
+            <MessageCirclePlusIcon className="size-6" />
+          </Link>
+        </Button>
         <Link href="https://github.com/joshxfi/umedu" target="_blank">
           <SquareCodeIcon className="size-5" />
         </Link>

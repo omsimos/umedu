@@ -3,8 +3,9 @@
 
 import { z } from "zod/v4";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { SendHorizonalIcon } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAppForm } from "@/hooks/form";
 
 const messageSchema = z.object({
@@ -18,18 +19,32 @@ const messageSchema = z.object({
     .max(20000, { error: "Message must not exceed 20000 characters" }),
 });
 
-type Props = {
-  handleAddPost: (value: {
-    title: string;
-    content: string;
-  }) => Promise<Promise<void> | undefined>;
-};
+export default function SubmitPage() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-export function MessageForm({ handleAddPost }: Props) {
   const mutation = useMutation({
-    mutationFn: async (value: { title: string; content: string }) => {
-      await handleAddPost(value);
+    mutationFn: (values: { title: string; content: string }) => {
+      return fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: values.title,
+          content: values.content,
+        }),
+      });
     },
+    onSuccess: () => {
+      toast.success("Message posted successfully!");
+      router.push("/forum");
+    },
+    onError: (error) => {
+      console.error("Error posting message:", error);
+      toast.error("Failed to post message. Please try again.");
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
   const form = useAppForm({
@@ -41,18 +56,13 @@ export function MessageForm({ handleAddPost }: Props) {
       onSubmit: messageSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        await mutation.mutateAsync(value);
-      } catch (error) {
-        console.error("Error submitting message:", error);
-        toast.error("Failed to post message. Please try again.");
-      }
+      mutation.mutate(value);
     },
   });
 
   return (
     <form
-      className="space-y-4"
+      className="space-y-4 w-full"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
@@ -62,6 +72,7 @@ export function MessageForm({ handleAddPost }: Props) {
         name="title"
         children={(field) => (
           <field.TextField
+            isRequired
             label="Title"
             placeholder="Enter a title for your message"
           />
@@ -71,6 +82,7 @@ export function MessageForm({ handleAddPost }: Props) {
         name="content"
         children={(field) => (
           <field.TextareaField
+            isRequired
             className="min-h-[200px]"
             label="Message"
             placeholder="What's on your mind? Your identity will remain anonymous."
