@@ -9,7 +9,7 @@ export function LoadingIcon({ loading, icon }: Props) {
   return (
     <>
       {loading ? (
-        <Loader2Icon className="animate-spin text-muted-foreground" />
+        <Loader2Icon className="animate-spin text-white" />
       ) : (
         Icon && <Icon />
       )}

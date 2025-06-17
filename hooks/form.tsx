@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { LoadingIcon } from "@/components/loading-icon";
+import { CharacterCounter } from "@/components/character-counter";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -31,25 +32,32 @@ function TextField({
           field.handleChange(e.target.value.replace(/\s+/g, " "))
         }
       />
-      {field.state.meta.errors.length > 0 && (
-        <p className="text-sm text-destructive mt-1">
-          {field.state.meta.errors[0].message}
-        </p>
-      )}
+
+      <div className="mt-1 flex items-center justify-between">
+        {field.state.meta.errors.length > 0 && (
+          <p className="text-sm text-destructive">
+            {field.state.meta.errors[0].message}
+          </p>
+        )}
+
+        <CharacterCounter current={field.state.value.length} max={300} />
+      </div>
     </div>
   );
 }
 
 function TextareaField({
   label,
+  isRequired,
   ...props
-}: { label: string } & React.ComponentProps<"textarea">) {
+}: { label: string; isRequired?: boolean } & React.ComponentProps<"textarea">) {
   const field = useFieldContext<string>();
 
   return (
     <div>
       <Label htmlFor={field.name} className="h-7">
         {label}
+        {isRequired && <span className="text-destructive">*</span>}
       </Label>
       <Textarea
         {...props}
@@ -57,11 +65,16 @@ function TextareaField({
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
       />
-      {field.state.meta.errors.length > 0 && (
-        <p className="text-sm text-destructive mt-1">
-          {field.state.meta.errors[0].message}
-        </p>
-      )}
+
+      <div className="mt-1 flex items-center justify-between">
+        {field.state.meta.errors.length > 0 && (
+          <p className="text-sm text-destructive">
+            {field.state.meta.errors[0].message}
+          </p>
+        )}
+
+        <CharacterCounter current={field.state.value.length} max={20000} />
+      </div>
     </div>
   );
 }
