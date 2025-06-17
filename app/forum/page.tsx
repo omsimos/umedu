@@ -6,12 +6,12 @@ import { useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AlertCircle, MessageCircleDashedIcon } from "lucide-react";
+import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
 
 import type { Post } from "@/db/schema";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PostCard } from "./components/post-card";
+import { PostCardSkeleton } from "./components/post-card-skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type PostsResponse = {
   posts: Post[];
@@ -54,6 +54,15 @@ export default function ForumPage() {
     paddingEnd: 100,
   });
 
+  const handleNextPage = useThrottledCallback(
+    () => {
+      fetchNextPage();
+    },
+    {
+      wait: 3000,
+    },
+  );
+
   useEffect(() => {
     const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
 
@@ -66,13 +75,14 @@ export default function ForumPage() {
       hasNextPage &&
       !isFetchingNextPage
     ) {
-      fetchNextPage();
+      handleNextPage();
     }
   }, [
     hasNextPage,
     fetchNextPage,
     allPosts.length,
     isFetchingNextPage,
+    handleNextPage,
     rowVirtualizer.getVirtualItems(),
   ]);
 
@@ -93,26 +103,7 @@ export default function ForumPage() {
     return (
       <div className="w-full mx-auto space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i} className="h-[220px] w-full justify-between">
-            <CardContent>
-              <Skeleton className="h-6 w-3/4 mb-2" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/5" />
-              </div>
-            </CardContent>
-
-            <div className="space-y-6">
-              <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
-              <CardFooter className="text-xs">
-                <div className="flex items-center gap-1">
-                  <Skeleton className="w-3.5 h-3.5 rounded-full" />
-                  <Skeleton className="h-3 w-32" />
-                </div>
-              </CardFooter>
-            </div>
-          </Card>
+          <PostCardSkeleton key={i} />
         ))}
       </div>
     );
@@ -156,9 +147,11 @@ export default function ForumPage() {
             >
               {isLoaderRow ? (
                 hasNextPage ? (
-                  "Loading more..."
+                  <PostCardSkeleton />
                 ) : (
-                  "Nothing more to load"
+                  <div className="text-center mt-4 text-muted-foreground">
+                    Nothing more to load
+                  </div>
                 )
               ) : (
                 <Link
