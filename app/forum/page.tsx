@@ -102,7 +102,7 @@ export default function ForumPage() {
 
   if (isLoading) {
     return (
-      <div className="w-full mx-auto space-y-4">
+      <div className="w-full mx-auto space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
           <PostCardSkeleton key={i} />
         ))}
@@ -160,7 +160,7 @@ export default function ForumPage() {
                 <Link
                   href={`/posts/${post.id}`}
                   key={post.id}
-                  className="block mb-2"
+                  className="block mb-3"
                 >
                   <PostCard key={post.id} post={post} />
                 </Link>

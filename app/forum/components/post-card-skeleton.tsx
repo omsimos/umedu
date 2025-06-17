@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export function PostCardSkeleton() {
   return (
-    <Card className="h-[220px] w-full justify-between">
+    <Card className="h-[200px] w-full justify-between">
       <CardContent>
         <Skeleton className="h-6 w-3/4 mb-2" />
         <div className="space-y-2">
