@@ -46,11 +46,10 @@ export default function ForumPage() {
 
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const rowVirtualizer = useVirtualizer({
+  const virtualizer = useVirtualizer({
     count: hasNextPage ? allPosts.length + 1 : allPosts.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 220,
-    gap: 10,
+    estimateSize: () => 200,
     paddingEnd: 100,
   });
 
@@ -64,7 +63,7 @@ export default function ForumPage() {
   );
 
   useEffect(() => {
-    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+    const [lastItem] = [...virtualizer.getVirtualItems()].reverse();
 
     if (!lastItem) {
       return;
@@ -83,8 +82,10 @@ export default function ForumPage() {
     allPosts.length,
     isFetchingNextPage,
     handleNextPage,
-    rowVirtualizer.getVirtualItems(),
+    virtualizer.getVirtualItems(),
   ]);
+
+  const items = virtualizer.getVirtualItems();
 
   if (error) {
     return (
@@ -123,25 +124,27 @@ export default function ForumPage() {
 
       <div
         style={{
-          height: `${rowVirtualizer.getTotalSize()}px`,
+          height: `${virtualizer.getTotalSize()}px`,
           width: "100%",
           position: "relative",
         }}
       >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+        {items.map((virtualRow) => {
           const isLoaderRow = virtualRow.index > allPosts.length - 1;
           const post = allPosts[virtualRow.index];
 
+          if (!isLoaderRow && !post) return null;
+
           return (
             <div
-              key={virtualRow.index}
-              className={virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"}
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={virtualizer.measureElement}
               style={{
                 position: "absolute",
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: `${virtualRow.size}px`,
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >
@@ -157,7 +160,7 @@ export default function ForumPage() {
                 <Link
                   href={`/posts/${post.id}`}
                   key={post.id}
-                  className="block"
+                  className="block mb-2"
                 >
                   <PostCard key={post.id} post={post} />
                 </Link>
