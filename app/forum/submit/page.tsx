@@ -74,6 +74,7 @@ export default function SubmitPage() {
           children={(field) => (
             <field.TextField
               isRequired
+              disabled={mutation.isPending}
               label="Title"
               placeholder="Enter a title for your message"
             />
@@ -87,6 +88,7 @@ export default function SubmitPage() {
           children={(field) => (
             <field.TextareaField
               isRequired
+              disabled={mutation.isPending}
               className="min-h-[200px]"
               label="Message"
               placeholder="What's on your mind? Your identity will remain anonymous."
