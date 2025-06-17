@@ -16,7 +16,7 @@ const messageSchema = z.object({
   content: z
     .string()
     .min(10, { error: "Message must be at least 10 characters" })
-    .max(20000, { error: "Message must not exceed 20000 characters" }),
+    .max(20000, { error: "Message must not exceed 20,000 characters" }),
 });
 
 export default function SubmitPage() {
@@ -62,33 +62,38 @@ export default function SubmitPage() {
 
   return (
     <form
-      className="space-y-4 w-full"
+      className="space-y-6 w-full"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
       }}
     >
-      <form.AppField
-        name="title"
-        children={(field) => (
-          <field.TextField
-            isRequired
-            label="Title"
-            placeholder="Enter a title for your message"
-          />
-        )}
-      />
-      <form.AppField
-        name="content"
-        children={(field) => (
-          <field.TextareaField
-            isRequired
-            className="min-h-[200px]"
-            label="Message"
-            placeholder="What's on your mind? Your identity will remain anonymous."
-          />
-        )}
-      />
+      <div className="space-y-2">
+        <form.AppField
+          name="title"
+          children={(field) => (
+            <field.TextField
+              isRequired
+              label="Title"
+              placeholder="Enter a title for your message"
+            />
+          )}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <form.AppField
+          name="content"
+          children={(field) => (
+            <field.TextareaField
+              isRequired
+              className="min-h-[200px]"
+              label="Message"
+              placeholder="What's on your mind? Your identity will remain anonymous."
+            />
+          )}
+        />
+      </div>
 
       <div className="flex justify-end">
         <form.AppForm>
