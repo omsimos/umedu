@@ -12,9 +12,11 @@ type Props = {
 
 export function PostCard({ post }: Props) {
   return (
-    <Card className="h-[220px] w-full justify-between">
+    <Card className="min-h-[200px] w-full justify-between overflow-hidden">
       <CardContent>
-        <CardTitle className="mb-2 leading-tight">{post.title}</CardTitle>
+        <CardTitle className="mb-2 leading-tight truncate">
+          {post.title}
+        </CardTitle>
         <div className="min-w-0 break-words dark:prose-invert text-muted-foreground font-medium">
           <Markdown remarkPlugins={[remarkGfm]}>
             {truncateContent(post.content).replace(/\s+/g, " ")}

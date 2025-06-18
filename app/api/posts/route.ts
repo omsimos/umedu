@@ -31,7 +31,8 @@ export async function GET(request: NextRequest) {
   const posts = await db
     .select()
     .from(postTable)
-    .where(and(cursorCondition, eq(postTable.forumId, session?.forumId)))
+    // .where(and(cursorCondition, eq(postTable.forumId, session?.forumId)))
+    .where(cursorCondition)
     .limit(10)
     .orderBy(desc(postTable.createdAt), desc(postTable.id));
 

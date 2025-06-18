@@ -26,7 +26,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
-      <div>
+      <div className="mb-8">
         <ForumNavbar
           forumId={post.forumId}
           renderButtons={() => <ShareButton title={post.title} />}
