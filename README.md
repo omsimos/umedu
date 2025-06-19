@@ -33,7 +33,6 @@ $ bun install
 ```env
 # .env
 
-APP_URL=http://localhost:3000 # For using fetch with RSC
 TURSO_CONNECTION_URL=http://127.0.0.1:8080
 WHITELIST=your@email.com # If you don't have a .edu email
 ```

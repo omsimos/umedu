@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { Post } from "@/db/schema";
 import { Footer } from "@/components/footer";
-import { formatUnixDate } from "@/lib/utils";
+import { formatUnixDate, getBaseUrl } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { ShareButton } from "./components/share-button";
@@ -53,7 +53,7 @@ export default async function Page({ params }: Props) {
 }
 
 async function getPost(id: string): Promise<Post> {
-  const res = await fetch(`${process.env.APP_URL}/api/posts/${id}`, {
+  const res = await fetch(`${getBaseUrl()}/api/posts/${id}`, {
     cache: "force-cache",
     next: {
       tags: [`post-${id}`],

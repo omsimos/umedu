@@ -1,18 +1,26 @@
 import { Post } from "@/db/schema";
-import { getBaseURL } from "@/lib/get-query-client";
-import { infiniteQueryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, isServer } from "@tanstack/react-query";
+import { getBaseUrl } from "./utils";
 
 type PostsResponse = {
   posts: Post[];
   nextCursor: string | null;
 };
 
+export function getApiBaseUrl() {
+  if (!isServer) {
+    return "";
+  }
+
+  return getBaseUrl();
+}
+
 export const postOptions = infiniteQueryOptions<PostsResponse>({
   queryKey: ["feed"],
   queryFn: async ({ pageParam }) => {
     const url = pageParam
-      ? `${getBaseURL()}/api/posts?cursor=${pageParam}`
-      : `${getBaseURL()}/api/posts`;
+      ? `${getApiBaseUrl()}/api/posts?cursor=${pageParam}`
+      : `${getApiBaseUrl()}/api/posts`;
 
     const res = await fetch(url);
     if (!res.ok) {
