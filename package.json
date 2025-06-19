@@ -16,6 +16,9 @@
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@libsql/client": "^0.15.9",
+    "@opentelemetry/api-logs": "^0.202.0",
+    "@opentelemetry/instrumentation": "^0.202.0",
+    "@opentelemetry/sdk-logs": "^0.202.0",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -30,6 +33,7 @@
     "@tanstack/react-query": "^5.80.7",
     "@tanstack/react-virtual": "^3.13.10",
     "@upstash/redis": "^1.35.0",
+    "@vercel/otel": "^1.13.0",
     "arctic": "^3.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

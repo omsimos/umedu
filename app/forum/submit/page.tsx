@@ -44,7 +44,7 @@ export default function SubmitPage() {
       console.error("Error posting message:", error);
       toast.error("Failed to post message. Please try again.");
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["posts"] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["feed"] }),
   });
 
   const form = useAppForm({
