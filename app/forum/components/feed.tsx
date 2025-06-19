@@ -8,15 +8,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { AlertCircle, MessageCircleDashedIcon } from "lucide-react";
 import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
 
-import type { Post } from "@/db/schema";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { PostCardSkeleton } from "./post-card-skeleton";
 import { PostCard } from "./post-card";
-
-type PostsResponse = {
-  posts: Post[];
-  nextCursor: string | null;
-};
+import { postOptions } from "@/lib/post-options";
+import { PostCardSkeleton } from "./post-card-skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function Feed() {
   const {
@@ -27,22 +22,9 @@ export function Feed() {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery<PostsResponse>({
-    queryKey: ["feed"],
-    queryFn: async ({ pageParam }) => {
-      const url = pageParam ? `/api/posts?cursor=${pageParam}` : "/api/posts";
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return res.json();
-    },
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  } = useInfiniteQuery(postOptions);
 
   const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
-
   const parentRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
