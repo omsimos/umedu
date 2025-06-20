@@ -4,9 +4,14 @@
 import { z } from "zod/v4";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { SendHorizonalIcon } from "lucide-react";
+import { SendHorizonalIcon, XIcon } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { useAppForm } from "@/hooks/form";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { AVAILABLE_TAGS } from "@/lib/constants";
+import { TagsChoice } from "./components/tags-choice";
 
 const messageSchema = z.object({
   title: z
@@ -17,6 +22,7 @@ const messageSchema = z.object({
     .string()
     .min(10, { error: "Message must be at least 10 characters" })
     .max(20000, { error: "Message must not exceed 20,000 characters" }),
+  tags: z.array(z.string()).max(3, { error: "You can select up to 3 tags" }),
 });
 
 export default function SubmitPage() {
@@ -51,6 +57,7 @@ export default function SubmitPage() {
     defaultValues: {
       title: "",
       content: "",
+      tags: [] as string[],
     },
     validators: {
       onSubmit: messageSchema,
@@ -68,34 +75,78 @@ export default function SubmitPage() {
         form.handleSubmit();
       }}
     >
-      <div className="space-y-2">
-        <form.AppField
-          name="title"
-          children={(field) => (
-            <field.TextField
-              isRequired
-              disabled={mutation.isPending}
-              label="Title"
-              placeholder="Enter a title for your message"
-            />
-          )}
-        />
-      </div>
+      <form.AppField
+        name="title"
+        children={(field) => (
+          <field.TextField
+            isRequired
+            disabled={mutation.isPending}
+            label="Title"
+            placeholder="Enter a title for your message"
+          />
+        )}
+      />
 
-      <div className="space-y-2">
-        <form.AppField
-          name="content"
-          children={(field) => (
-            <field.TextareaField
-              isRequired
-              disabled={mutation.isPending}
-              className="min-h-[200px]"
-              label="Message"
-              placeholder="What's on your mind? Your identity will remain anonymous."
-            />
-          )}
-        />
-      </div>
+      <form.AppField
+        name="tags"
+        children={(field) => {
+          const selectedTags = field.state.value;
+
+          return (
+            <div>
+              <Label className="h-7">Tags</Label>
+
+              <div className="flex flex-wrap gap-2 mb-2">
+                {selectedTags.length > 0 ? (
+                  selectedTags.map((tagId) => {
+                    const tag = AVAILABLE_TAGS.find((t) => t === tagId);
+                    if (!tag) return null;
+
+                    return (
+                      <Badge key={tagId} variant="secondary">
+                        {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            field.handleChange(
+                              selectedTags.filter((id) => id !== tagId),
+                            )
+                          }
+                          disabled={mutation.isPending}
+                        >
+                          <XIcon size={12} />
+                        </button>
+                      </Badge>
+                    );
+                  })
+                ) : (
+                  <span className="text-gray-500 text-sm">
+                    No tags selected
+                  </span>
+                )}
+                <TagsChoice
+                  disabled={mutation.isPending}
+                  onTagsChange={field.handleChange}
+                  selectedTags={field.state.value}
+                />
+              </div>
+            </div>
+          );
+        }}
+      />
+
+      <form.AppField
+        name="content"
+        children={(field) => (
+          <field.TextareaField
+            isRequired
+            disabled={mutation.isPending}
+            className="min-h-[200px]"
+            label="Message"
+            placeholder="What's on your mind? Your identity will remain anonymous."
+          />
+        )}
+      />
 
       <div className="flex justify-end">
         <form.AppForm>
