@@ -5,10 +5,11 @@ import { notFound } from "next/navigation";
 
 import { Post } from "@/db/schema";
 import { Footer } from "@/components/footer";
-import { formatDate, getBaseUrl } from "@/lib/utils";
+import { getBaseUrl } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { ShareButton } from "./components/share-button";
+import { PostDate } from "./components/post-date";
 
 export const metadata: Metadata = {
   robots: {
@@ -34,9 +35,7 @@ export default async function Page({ params }: Props) {
         <div>
           <div>
             <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
-            <p className="text-muted-foreground text-sm mt-2">
-              Posted at {formatDate(post.createdAt)}
-            </p>
+            <PostDate createdAt={post.createdAt} />
           </div>
         </div>
 
