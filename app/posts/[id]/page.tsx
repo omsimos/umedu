@@ -5,21 +5,44 @@ import { notFound } from "next/navigation";
 
 import { Post } from "@/db/schema";
 import { Footer } from "@/components/footer";
-import { getBaseUrl } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { ForumNavbar } from "@/app/forum/components/forum-navbar";
-import { ShareButton } from "./components/share-button";
 import { PostDate } from "./components/post-date";
-
-export const metadata: Metadata = {
-  robots: {
-    index: false,
-  },
-};
+import { Separator } from "@/components/ui/separator";
+import { ShareButton } from "./components/share-button";
+import { getBaseUrl, truncateContent } from "@/lib/utils";
+import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getPost(id);
+
+  const title = `Umedu – ${post.title}`;
+  const description = truncateContent(post.content, 160);
+
+  return {
+    metadataBase: new URL(`https://umedu.omsimos.com/posts/${id}`),
+    title: `Umedu | ${post.title}`,
+    description: truncateContent(post.content),
+    openGraph: {
+      type: "website",
+      siteName: "Umedu",
+      url: `https://umedu.omsimos.com/posts/${id}`,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: false,
+    },
+  };
+}
 
 export default async function Page({ params }: Props) {
   const { id } = await params;
