@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     if (cursor) {
       const [createdAt, cursorId] = cursor.split("_");
-      const cursorDate = Number.parseInt(createdAt);
+      const cursorDate = new Date(createdAt);
 
       cursorCondition = or(
         lt(postTable.createdAt, cursorDate),

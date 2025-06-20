@@ -1,23 +1,35 @@
 import { sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const forumTable = sqliteTable("forum", {
   id: text("id").primaryKey(),
 });
 
-export const postTable = sqliteTable("post", {
-  id: text().$defaultFn(() => nanoid()),
-  forumId: text("forum_id")
-    .notNull()
-    .references(() => forumTable.id),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  createdAt: integer("created_at", { mode: "number" })
-    .notNull()
-    .default(sql`(unixepoch())`),
-  updatedAt: integer("updated_at").$onUpdate(() => sql`(unixepoch())`),
-});
+export const postTable = sqliteTable(
+  "post",
+  {
+    id: text().$defaultFn(() => nanoid()),
+    forumId: text("forum_id")
+      .notNull()
+      .references(() => forumTable.id),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+      () => sql`(unixepoch())`,
+    ),
+  },
+  (table) => [
+    index("post_forum_created_id_idx").on(
+      table.forumId,
+      table.createdAt,
+      table.id,
+    ),
+  ],
+);
 
 export const sessionTable = sqliteTable("session", {
   id: text("id").primaryKey(),

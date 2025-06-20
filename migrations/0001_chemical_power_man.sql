@@ -1,0 +1,1 @@
+CREATE INDEX `post_forum_created_id_idx` ON `post` (`forum_id`,`created_at`,`id`);

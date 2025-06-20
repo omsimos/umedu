@@ -3,7 +3,7 @@ import Markdown from "react-markdown";
 import { Calendar } from "lucide-react";
 
 import { Post } from "@/db/schema";
-import { formatUnixDate, truncateContent } from "@/lib/utils";
+import { formatDate, truncateContent } from "@/lib/utils";
 import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
 
 type Props = {
@@ -29,7 +29,7 @@ export function PostCard({ post }: Props) {
         <CardFooter className="text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <Calendar className="w-3.5 h-3.5" />
-            <span>Posted {formatUnixDate(post.createdAt)}</span>
+            <span>Posted {formatDate(post.createdAt)}</span>
           </div>
         </CardFooter>
       </div>
