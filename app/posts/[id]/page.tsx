@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { Post } from "@/db/schema";
 import { Footer } from "@/components/footer";
-import { formatUnixDate, getBaseUrl } from "@/lib/utils";
+import { formatDate, getBaseUrl } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { ShareButton } from "./components/share-button";
@@ -35,7 +35,7 @@ export default async function Page({ params }: Props) {
           <div>
             <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
             <p className="text-muted-foreground text-sm mt-2">
-              Posted at {formatUnixDate(post.createdAt)}
+              Posted at {formatDate(post.createdAt)}
             </p>
           </div>
         </div>

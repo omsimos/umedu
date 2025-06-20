@@ -1,13 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
-import { format, fromUnixTime } from "date-fns";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatUnixDate = (date: number) => {
-  return format(fromUnixTime(date), "MMM d, yyyy 'at' h:mm a");
+export const formatDate = (date: Date) => {
+  return format(date, "MMM d, yyyy 'at' h:mm a");
 };
 
 export const truncateContent = (content: string, maxLength = 100) => {
