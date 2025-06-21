@@ -29,12 +29,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const posts = await db
-      .select()
-      .from(postTable)
-      .where(and(cursorCondition, eq(postTable.forumId, session?.forumId)))
-      .limit(10)
-      .orderBy(desc(postTable.createdAt), desc(postTable.id));
+    const posts = await db.query.postTable.findMany({
+      with: {
+        tags: true,
+      },
+      where: and(cursorCondition, eq(postTable.forumId, session?.forumId)),
+      orderBy: [desc(postTable.createdAt), desc(postTable.id)],
+      limit: 10,
+    });
 
     return Response.json({
       posts,

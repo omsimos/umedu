@@ -15,6 +15,13 @@
       "when": 1750395589285,
       "tag": "0001_chemical_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1750482398675,
+      "tag": "0002_flippant_stepford_cuckoos",
+      "breakpoints": true
     }
   ]
 }

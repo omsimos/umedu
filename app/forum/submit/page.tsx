@@ -104,7 +104,7 @@ export default function SubmitPage() {
 
                     return (
                       <Badge key={tagId} variant="secondary">
-                        {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                        {tag}
                         <button
                           type="button"
                           onClick={() =>

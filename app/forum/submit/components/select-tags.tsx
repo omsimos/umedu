@@ -30,7 +30,7 @@ export function SelectTags({
                 onClick={() => toggleTag(tag)}
                 disabled={!canSelect && !isSelected}
               >
-                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                {tag}
               </Button>
             );
           })}
