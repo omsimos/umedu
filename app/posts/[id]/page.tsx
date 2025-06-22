@@ -83,6 +83,7 @@ async function getPost(id: string): Promise<Post> {
   });
 
   if (!res.ok) notFound();
+  const post = await res.json();
 
-  return res.json();
+  return post;
 }

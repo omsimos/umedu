@@ -1,14 +1,16 @@
+import { Tag } from "@/db/schema";
 import { Button } from "@/components/ui/button";
-import { AVAILABLE_TAGS } from "@/lib/constants";
 
 type Props = {
+  tags: Array<Tag>;
   toggleTag: (val: string) => void;
   onSave: () => void;
   onCancel: () => void;
   tempSelectedTags: string[];
 };
 
-export function SelectTags({
+export function DisplayTags({
+  tags,
   toggleTag,
   onSave,
   onCancel,
@@ -18,19 +20,19 @@ export function SelectTags({
     <div>
       <div className="p-4 space-y-4">
         <div className="grid grid-cols-2 gap-2">
-          {AVAILABLE_TAGS.map((tag) => {
-            const isSelected = tempSelectedTags.includes(tag);
+          {tags.map((tag) => {
+            const isSelected = tempSelectedTags.includes(tag.id);
             const canSelect = tempSelectedTags.length < 3 || isSelected;
 
             return (
               <Button
-                key={tag}
+                key={tag.id}
                 type="button"
                 variant={isSelected ? "secondary" : "outline"}
-                onClick={() => toggleTag(tag)}
+                onClick={() => toggleTag(tag.id)}
                 disabled={!canSelect && !isSelected}
               >
-                {tag}
+                {tag.name}
               </Button>
             );
           })}

@@ -1,7 +1,8 @@
 "use client";
 
-import * as React from "react";
-
+import { toast } from "sonner";
+import { useState } from "react";
+import { TagIcon } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,18 +21,22 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { useState } from "react";
-import { TagIcon } from "lucide-react";
-import { SelectTags } from "./select-tags";
-import { toast } from "sonner";
+import { Tag } from "@/db/schema";
+import { DisplayTags } from "./display-tags";
 
 type Props = {
+  tags?: Array<Tag>;
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
   disabled?: boolean;
 };
 
-export function TagsChoice({ selectedTags, onTagsChange, disabled }: Props) {
+export function TagsSelection({
+  tags,
+  selectedTags,
+  onTagsChange,
+  disabled,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [tempSelectedTags, setTempSelectedTags] =
@@ -80,12 +85,15 @@ export function TagsChoice({ selectedTags, onTagsChange, disabled }: Props) {
               {tempSelectedTags.length}/3
             </DialogDescription>
           </DialogHeader>
-          <SelectTags
-            toggleTag={toggleTag}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            tempSelectedTags={tempSelectedTags}
-          />
+          {tags && (
+            <DisplayTags
+              tags={tags}
+              toggleTag={toggleTag}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              tempSelectedTags={tempSelectedTags}
+            />
+          )}
         </DialogContent>
       </Dialog>
     );
@@ -113,12 +121,15 @@ export function TagsChoice({ selectedTags, onTagsChange, disabled }: Props) {
             {tempSelectedTags.length}/3
           </DrawerDescription>
         </DrawerHeader>
-        <SelectTags
-          toggleTag={toggleTag}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          tempSelectedTags={tempSelectedTags}
-        />
+        {tags && (
+          <DisplayTags
+            tags={tags}
+            toggleTag={toggleTag}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            tempSelectedTags={tempSelectedTags}
+          />
+        )}
       </DrawerContent>
     </Drawer>
   );

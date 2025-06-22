@@ -83,5 +83,6 @@ export const sessionTable = sqliteTable("session", {
 });
 
 export type Post = typeof postTable.$inferSelect;
+export type Tag = typeof tagTable.$inferSelect;
 export type Forum = typeof forumTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
