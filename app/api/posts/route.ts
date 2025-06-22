@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { desc, lt, and, or, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { postTable } from "@/db/schema";
+import { postsToTags, postTable } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -54,6 +54,9 @@ export async function GET(request: NextRequest) {
 const postSchema = z.object({
   title: z.string(),
   content: z.string(),
+  tags: z.array(z.string()).max(3, {
+    error: "You can select up to 3 tags",
+  }),
 });
 
 export async function POST(req: Request) {
@@ -71,12 +74,21 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const { title, content } = params.data;
+    const { title, content, tags } = params.data;
 
-    await db.insert(postTable).values({
-      title,
-      content,
-      forumId: session.forumId,
+    await db.transaction(async (tx) => {
+      const post = await tx
+        .insert(postTable)
+        .values({
+          title,
+          content,
+          forumId: session.forumId,
+        })
+        .returning({ id: postTable.id });
+
+      await tx
+        .insert(postsToTags)
+        .values(tags.map((tag) => ({ postId: post[0].id, tagId: tag })));
     });
 
     return Response.json(
