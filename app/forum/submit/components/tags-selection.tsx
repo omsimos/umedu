@@ -21,26 +21,18 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Tag } from "@/db/schema";
 import { DisplayTags } from "./display-tags";
 
 type Props = {
-  tags?: Array<Tag>;
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
   disabled?: boolean;
 };
 
-export function TagsSelection({
-  tags,
-  selectedTags,
-  onTagsChange,
-  disabled,
-}: Props) {
+export function TagsSelection({ selectedTags, onTagsChange, disabled }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [tempSelectedTags, setTempSelectedTags] =
-    useState<string[]>(selectedTags);
+  const [tempSelectedTags, setTempSelectedTags] = useState(selectedTags);
 
   const toggleTag = (tagId: string) => {
     if (tempSelectedTags.includes(tagId)) {
@@ -85,15 +77,12 @@ export function TagsSelection({
               {tempSelectedTags.length}/3
             </DialogDescription>
           </DialogHeader>
-          {tags && (
-            <DisplayTags
-              tags={tags}
-              toggleTag={toggleTag}
-              onSave={handleSave}
-              onCancel={handleCancel}
-              tempSelectedTags={tempSelectedTags}
-            />
-          )}
+          <DisplayTags
+            toggleTag={toggleTag}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            tempSelectedTags={tempSelectedTags}
+          />
         </DialogContent>
       </Dialog>
     );
@@ -121,15 +110,13 @@ export function TagsSelection({
             {tempSelectedTags.length}/3
           </DrawerDescription>
         </DrawerHeader>
-        {tags && (
-          <DisplayTags
-            tags={tags}
-            toggleTag={toggleTag}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            tempSelectedTags={tempSelectedTags}
-          />
-        )}
+
+        <DisplayTags
+          toggleTag={toggleTag}
+          onSave={handleSave}
+          onCancel={handleCancel}
+          tempSelectedTags={tempSelectedTags}
+        />
       </DrawerContent>
     </Drawer>
   );

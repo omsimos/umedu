@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { SendHorizonalIcon, XIcon } from "lucide-react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
-import { Tag } from "@/db/schema";
 import { useAppForm } from "@/hooks/form";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { TagsSelection } from "./components/tags-selection";
+import { getTagsQuery } from "@/lib/queries";
 
 const messageSchema = z.object({
   title: z
@@ -28,18 +28,7 @@ const messageSchema = z.object({
 export default function SubmitPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  const { data: tags } = useQuery<Array<Tag>>({
-    queryKey: ["tags"],
-    queryFn: async () => {
-      const res = await fetch("/api/tags");
-      if (!res.ok) {
-        throw new Error("Failed to fetch tags");
-      }
-      const data = await res.json();
-      return data;
-    },
-  });
+  const { data: tags } = useQuery(getTagsQuery);
 
   const mutation = useMutation({
     mutationFn: (values: z.infer<typeof messageSchema>) => {
@@ -138,7 +127,6 @@ export default function SubmitPage() {
                   </span>
                 )}
                 <TagsSelection
-                  tags={tags}
                   disabled={mutation.isPending || !tags}
                   onTagsChange={field.handleChange}
                   selectedTags={field.state.value}
