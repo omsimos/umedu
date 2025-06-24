@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { desc, lt, and, or, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { postTable } from "@/db/schema";
+import { tagsToPostsTable, postTable, Post, Tag } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -29,15 +29,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const posts = await db
-      .select()
-      .from(postTable)
-      .where(and(cursorCondition, eq(postTable.forumId, session?.forumId)))
-      .limit(10)
-      .orderBy(desc(postTable.createdAt), desc(postTable.id));
+    const posts = await db.query.postTable.findMany({
+      with: {
+        tagsToPosts: {
+          with: {
+            tag: true,
+          },
+        },
+      },
+      where: and(cursorCondition, eq(postTable.forumId, session?.forumId)),
+      orderBy: [desc(postTable.createdAt), desc(postTable.id)],
+      limit: 10,
+    });
+
+    const postsData: (Post & { tags: Tag[] })[] = posts.map(
+      ({ tagsToPosts, ...rest }) => ({
+        ...rest,
+        tags: tagsToPosts.map((t) => t.tag),
+      }),
+    );
 
     return Response.json({
-      posts,
+      posts: postsData,
       nextCursor:
         posts.length === 10
           ? `${posts[posts.length - 1].createdAt}_${posts[posts.length - 1].id}`
@@ -52,6 +65,9 @@ export async function GET(request: NextRequest) {
 const postSchema = z.object({
   title: z.string(),
   content: z.string(),
+  tags: z.array(z.string()).max(3, {
+    error: "You can select up to 3 tags",
+  }),
 });
 
 export async function POST(req: Request) {
@@ -69,12 +85,21 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const { title, content } = params.data;
+    const { title, content, tags } = params.data;
 
-    await db.insert(postTable).values({
-      title,
-      content,
-      forumId: session.forumId,
+    await db.transaction(async (tx) => {
+      const post = await tx
+        .insert(postTable)
+        .values({
+          title,
+          content,
+          forumId: session.forumId,
+        })
+        .returning({ id: postTable.id });
+
+      await tx
+        .insert(tagsToPostsTable)
+        .values(tags.map((tag) => ({ postId: post[0].id, tagId: tag })));
     });
 
     return Response.json(
