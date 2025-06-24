@@ -2,12 +2,13 @@ import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { Calendar } from "lucide-react";
 
-import { Post } from "@/db/schema";
+import { Post, Tag } from "@/db/schema";
 import { formatDate, truncateContent } from "@/lib/utils";
 import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
-  post: Post;
+  post: Post & { tags: Tag[] };
 };
 
 export function PostCard({ post }: Props) {
@@ -22,6 +23,15 @@ export function PostCard({ post }: Props) {
             {truncateContent(post.content).replace(/\s+/g, " ")}
           </Markdown>
         </div>
+
+        <div className="space-x-2 mt-4">
+          {post.tags.map((tag) => (
+            <Badge key={tag.id} variant="secondary">
+              {tag.name}
+            </Badge>
+          ))}
+        </div>
+
       </CardContent>
 
       <div className="space-y-6">
