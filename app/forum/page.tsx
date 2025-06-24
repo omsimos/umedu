@@ -11,6 +11,12 @@ import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
 import { PostCard } from "./components/post-card";
 import { PostCardSkeleton } from "./components/post-card-skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Post, Tag } from "@/db/schema";
+
+type PostsResponse = {
+  posts: (Post & { tags: Tag[] })[];
+  nextCursor: string | null;
+};
 
 export default function FeedPage() {
   const {
@@ -21,7 +27,7 @@ export default function FeedPage() {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery({
+  } = useInfiniteQuery<PostsResponse>({
     queryKey: ["feed"],
     queryFn: async ({ pageParam }) => {
       const url = pageParam ? `/api/posts?cursor=${pageParam}` : "/api/posts";

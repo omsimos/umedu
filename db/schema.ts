@@ -34,7 +34,7 @@ export const postTable = sqliteTable(
 );
 
 export const postsRelations = relations(postTable, ({ many }) => ({
-  tags: many(postsToTags),
+  tagsToPosts: many(tagsToPostsTable),
 }));
 
 export const tagTable = sqliteTable("tag", {
@@ -45,11 +45,11 @@ export const tagTable = sqliteTable("tag", {
 });
 
 export const tagsRelations = relations(tagTable, ({ many }) => ({
-  posts: many(postsToTags),
+ tagsToPosts: many(tagsToPostsTable),
 }));
 
-export const postsToTags = sqliteTable(
-  "posts_to_tags",
+export const tagsToPostsTable = sqliteTable(
+  "tags_to_posts",
   {
     postId: text("post_id")
       .notNull()
@@ -61,13 +61,13 @@ export const postsToTags = sqliteTable(
   (t) => [primaryKey({ columns: [t.postId, t.tagId] })],
 );
 
-export const postToTagsRelations = relations(postsToTags, ({ one }) => ({
+export const tagsToPostsRelations = relations(tagsToPostsTable, ({ one }) => ({
   post: one(postTable, {
-    fields: [postsToTags.postId],
+    fields: [tagsToPostsTable.postId],
     references: [postTable.id],
   }),
   tag: one(tagTable, {
-    fields: [postsToTags.tagId],
+    fields: [tagsToPostsTable.tagId],
     references: [tagTable.id],
   }),
 }));
@@ -86,3 +86,4 @@ export type Post = typeof postTable.$inferSelect;
 export type Tag = typeof tagTable.$inferSelect;
 export type Forum = typeof forumTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
+export type TagsToPosts = typeof tagsToPostsTable.$inferSelect;

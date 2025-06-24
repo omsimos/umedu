@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { desc, lt, and, or, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { postsToTags, postTable } from "@/db/schema";
+import { tagsToPostsTable, postTable, Post, Tag } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -31,15 +31,29 @@ export async function GET(request: NextRequest) {
 
     const posts = await db.query.postTable.findMany({
       with: {
-        tags: true,
+        tagsToPosts: {
+          with: {
+            tag: true,
+          },
+        },
       },
       where: and(cursorCondition, eq(postTable.forumId, session?.forumId)),
       orderBy: [desc(postTable.createdAt), desc(postTable.id)],
       limit: 10,
     });
 
+    const postsData: (Post & { tags: Tag[] })[] = posts.map((post) => ({
+      id: post.id,
+      forumId: post.forumId,
+      title: post.title,
+      content: post.content,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      tags: post.tagsToPosts.map((t) => t.tag),
+    }));
+
     return Response.json({
-      posts,
+      posts: postsData,
       nextCursor:
         posts.length === 10
           ? `${posts[posts.length - 1].createdAt}_${posts[posts.length - 1].id}`
@@ -87,7 +101,7 @@ export async function POST(req: Request) {
         .returning({ id: postTable.id });
 
       await tx
-        .insert(postsToTags)
+        .insert(tagsToPostsTable)
         .values(tags.map((tag) => ({ postId: post[0].id, tagId: tag })));
     });
 
