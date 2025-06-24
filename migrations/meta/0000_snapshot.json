@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "81db50bc-bbdc-447e-b20b-17b730c0bd24",
+  "id": "aec19362-eee8-4ac9-bd05-7891158ef468",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "forum": {
@@ -27,8 +27,8 @@
         "id": {
           "name": "id",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false,
+          "primaryKey": true,
+          "notNull": true,
           "autoincrement": false
         },
         "forum_id": {
@@ -68,7 +68,17 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "post_forum_created_id_idx": {
+          "name": "post_forum_created_id_idx",
+          "columns": [
+            "forum_id",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "post_forum_id_forum_id_fk": {
           "name": "post_forum_id_forum_id_fk",
@@ -130,6 +140,97 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tag": {
+      "name": "tag",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "tag_name_unique": {
+          "name": "tag_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tags_to_posts": {
+      "name": "tags_to_posts",
+      "columns": {
+        "post_id": {
+          "name": "post_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tag_id": {
+          "name": "tag_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tags_to_posts_post_id_post_id_fk": {
+          "name": "tags_to_posts_post_id_post_id_fk",
+          "tableFrom": "tags_to_posts",
+          "tableTo": "post",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tags_to_posts_tag_id_tag_id_fk": {
+          "name": "tags_to_posts_tag_id_tag_id_fk",
+          "tableFrom": "tags_to_posts",
+          "tableTo": "tag",
+          "columnsFrom": [
+            "tag_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tags_to_posts_post_id_tag_id_pk": {
+          "columns": [
+            "post_id",
+            "tag_id"
+          ],
+          "name": "tags_to_posts_post_id_tag_id_pk"
+        }
+      },
       "uniqueConstraints": {},
       "checkConstraints": {}
     }
