@@ -3,8 +3,9 @@ import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { notFound } from "next/navigation";
 
-import { Post } from "@/db/schema";
+import { Post, Tag } from "@/db/schema";
 import { Footer } from "@/components/footer";
+import { Badge } from "@/components/ui/badge";
 import { PostDate } from "./components/post-date";
 import { Separator } from "@/components/ui/separator";
 import { ShareButton } from "./components/share-button";
@@ -55,11 +56,18 @@ export default async function Page({ params }: Props) {
           forumId={post.forumId}
           renderButtons={() => <ShareButton title={post.title} />}
         />
-        <div>
-          <div>
-            <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
-            <PostDate createdAt={post.createdAt} />
+        <div className="space-y-2">
+          <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
+
+          <div className="space-x-2">
+            {post.tags.map((tag) => (
+              <Badge key={tag.id} variant="secondary">
+                {tag.name}
+              </Badge>
+            ))}
           </div>
+
+          <PostDate createdAt={post.createdAt} />
         </div>
 
         <Separator className="my-4" />
@@ -74,7 +82,7 @@ export default async function Page({ params }: Props) {
   );
 }
 
-async function getPost(id: string): Promise<Post> {
+async function getPost(id: string): Promise<Post & { tags: Tag[] }> {
   const res = await fetch(`${getBaseUrl()}/api/posts/${id}`, {
     cache: "force-cache",
     next: {

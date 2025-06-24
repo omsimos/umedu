@@ -42,15 +42,12 @@ export async function GET(request: NextRequest) {
       limit: 10,
     });
 
-    const postsData: (Post & { tags: Tag[] })[] = posts.map((post) => ({
-      id: post.id,
-      forumId: post.forumId,
-      title: post.title,
-      content: post.content,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
-      tags: post.tagsToPosts.map((t) => t.tag),
-    }));
+    const postsData: (Post & { tags: Tag[] })[] = posts.map(
+      ({ tagsToPosts, ...rest }) => ({
+        ...rest,
+        tags: tagsToPosts.map((t) => t.tag),
+      }),
+    );
 
     return Response.json({
       posts: postsData,
