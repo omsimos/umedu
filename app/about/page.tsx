@@ -56,13 +56,53 @@ export default function Home() {
               Anonymity and privacy
             </h2>
             <p className="leading-7 mt-4 text-muted-foreground">
-              To protect the privacy of our users,{" "}
               <strong>
-                we do not store your email address or any personal information.
+                No user accounts, no personal data, and no emails are ever
+                stored.
               </strong>{" "}
-              Authenticating with your school email simply creates a session in
-              your browser that grants access to a private forum based on your{" "}
-              <i>.edu</i> email domain.
+              Umedu does not keep any user tables or identity information in our
+              database.
+              <br />
+              <br />
+              When you log in with your <i>.edu</i> email, we use it only to
+              determine your school’s private forum—specifically, we extract the
+              domain (for example,{" "}
+              <code className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                myschool.edu.ph
+              </code>
+              ) to assign you to the right forum.{" "}
+              <strong>
+                Even in your session, only the forum ID is stored—never your
+                email address itself.
+              </strong>
+              <br />
+              <br />
+              This approach ensures there’s no trace of your personal
+              information or identity anywhere in our system, providing true
+              privacy by design.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-semibold border-b pb-2 text-3xl tracking-tight">
+              Security and encryption
+            </h2>
+            <p className="leading-7 mt-4 text-muted-foreground">
+              For your peace of mind, all post titles and content on Umedu are
+              encrypted using the industry-standard{" "}
+              <span className="font-semibold">AES-GCM</span> (Advanced
+              Encryption Standard in Galois/Counter Mode) algorithm before they
+              are stored. This means that even if someone were to access the
+              database directly, your posts would remain completely unreadable
+              without the secure encryption key.
+              <br />
+              <br />
+              <span className="font-semibold">
+                What does this mean for you?
+              </span>{" "}
+              Only authorized actions on the platform can decrypt and display
+              your posts. We do not store decryption keys alongside your data,
+              and your content is protected both at rest and in transit.
             </p>
           </div>
         </div>

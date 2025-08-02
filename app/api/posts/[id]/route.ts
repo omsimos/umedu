@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { Post, postTable, Tag } from "@/db/schema";
+import { aesDecrypt } from "@/lib/aes";
 import { eq } from "drizzle-orm";
 
 export async function GET(
@@ -28,6 +29,8 @@ export async function GET(
 
     const postData: Post & { tags: Tag[] } = {
       ...rest,
+      title: await aesDecrypt(rest.title),
+      content: await aesDecrypt(rest.content),
       tags: tagsToPosts.map((t) => t.tag),
     };
 

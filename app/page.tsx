@@ -16,7 +16,7 @@ export default function Home() {
             um<i>edu</i>
           </h1>
           <p className="text-muted-foreground font-medium text-center">
-            open-source, anonymous, private <i>edu</i> forums
+            open-source, anonymous, encrypted, private <i>edu</i> forums
           </p>
 
           <Button asChild className="mt-4" variant="outline">

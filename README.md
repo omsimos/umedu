@@ -1,5 +1,5 @@
 ## About the platform
-**[Umedu](https://umedu.omsimos.com)** is a social platform that automatically creates private forums for students based on their _.edu_ email address. For example, if you authenticate with an email like `hello@myschool.edu.ph`, you’ll be able to access the `myschool` private forum.
+**[Umedu](https://umedu.omsimos.com)** is a social platform that automatically creates encrypted private forums for students based on their _.edu_ email address. For example, if you authenticate with an email like `hello@myschool.edu.ph`, you’ll be able to access the `myschool` private forum.
 
 ## Anonymity and privacy
 
@@ -44,6 +44,19 @@ You must setup your own Google OAuth client. [Setting up OAuth 2.0 &rarr;](https
 GOOGLE_CLIENT_ID=YOUR_CLIENT_ID
 GOOGLE_CLIENT_SECRET=YOUR_CLIENT_SECRET
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
+```
+
+This project uses `AES-256-GCM` to encrypt posts in the private forums. You must generate a key and set it as an environment variable.
+```env
+# .env
+
+AES_256_GCM_KEY=YOUR_ENCRYPTION_KEY
+```
+
+### Generate Encryption Key
+Run the command below to generate an encryption key. The key will be printed to the console.
+```sh
+$ bun aes:generate
 ```
 
 ### Development Server

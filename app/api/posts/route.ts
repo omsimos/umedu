@@ -3,8 +3,9 @@ import type { NextRequest } from "next/server";
 import { desc, lt, and, or, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { tagsToPostsTable, postTable, Post, Tag } from "@/db/schema";
+import { tagsToPostsTable, postTable } from "@/db/schema";
 import { getSession } from "@/lib/auth";
+import { aesDecrypt, aesEncrypt } from "@/lib/aes";
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,10 +43,28 @@ export async function GET(request: NextRequest) {
       limit: 10,
     });
 
-    const postsData: (Post & { tags: Tag[] })[] = posts.map(
-      ({ tagsToPosts, ...rest }) => ({
-        ...rest,
-        tags: tagsToPosts.map((t) => t.tag),
+    const postsData = await Promise.all(
+      posts.map(async ({ tagsToPosts, ...rest }) => {
+        let title: string | null;
+        let content: string | null;
+
+        try {
+          title = await aesDecrypt(rest.title);
+        } catch {
+          title = rest.title;
+        }
+
+        try {
+          content = await aesDecrypt(rest.content);
+        } catch {
+          content = rest.content;
+        }
+        return {
+          ...rest,
+          title,
+          content,
+          tags: tagsToPosts.map((t) => t.tag),
+        };
       }),
     );
 
@@ -87,20 +106,31 @@ export async function POST(req: Request) {
 
     const { title, content, tags } = params.data;
 
-    await db.transaction(async (tx) => {
-      const post = await tx
-        .insert(postTable)
-        .values({
-          title,
-          content,
-          forumId: session.forumId,
-        })
-        .returning({ id: postTable.id });
+    const encryptedTitle = await aesEncrypt(title);
+    const encryptedContent = await aesEncrypt(content);
 
-      await tx
-        .insert(tagsToPostsTable)
-        .values(tags.map((tag) => ({ postId: post[0].id, tagId: tag })));
-    });
+    if (tags.length > 0) {
+      await db.transaction(async (tx) => {
+        const post = await tx
+          .insert(postTable)
+          .values({
+            title: encryptedTitle,
+            content: encryptedContent,
+            forumId: session.forumId,
+          })
+          .returning({ id: postTable.id });
+
+        await tx
+          .insert(tagsToPostsTable)
+          .values(tags.map((tag) => ({ postId: post[0].id, tagId: tag })));
+      });
+    } else {
+      await db.insert(postTable).values({
+        title: encryptedTitle,
+        content: encryptedContent,
+        forumId: session.forumId,
+      });
+    }
 
     return Response.json(
       { message: "Post added successfully" },
