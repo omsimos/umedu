@@ -46,6 +46,19 @@ GOOGLE_CLIENT_SECRET=YOUR_CLIENT_SECRET
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
 ```
 
+This project uses `AES-256-GCM` to encrypt messages in the private forums. You must generate a key and set it as an environment variable.
+```env
+# .env
+
+AES_256_GCM_KEY=YOUR_ENCRYPTION_KEY
+```
+
+### Generate Encryption Key
+Run the command below to generate an encryption key. The key will be printed to the console.
+```sh
+$ bun aes:generate
+```
+
 ### Development Server
 ```sh
 $ bun dev

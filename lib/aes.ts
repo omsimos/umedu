@@ -10,8 +10,8 @@ function toBase64(uint8Array: Uint8Array): string {
 }
 
 function getAesKeyFromEnv(): string {
-  const key = process.env.AES_KEY;
-  if (!key) throw new Error("AES_KEY environment variable not set");
+  const key = process.env.AES_256_GCM_KEY;
+  if (!key) throw new Error("AES_256_GCM_KEY environment variable not set");
   return key;
 }
 
@@ -19,32 +19,13 @@ async function importAesKey(base64Key: string): Promise<CryptoKey> {
   const rawKey = toUint8Array(base64Key);
 
   if (rawKey.length !== 32) {
-    throw new Error("AES key must be 256 bits (32 bytes)");
+    throw new Error("AES-GCM key must be 256 bits (32 bytes)");
   }
 
   return await subtle.importKey("raw", rawKey, { name: "AES-GCM" }, true, [
     "encrypt",
     "decrypt",
   ]);
-}
-
-export async function generateAesKey(): Promise<string> {
-  try {
-    const key = await subtle.generateKey(
-      {
-        name: "AES-GCM",
-        length: 256,
-      },
-      true,
-      ["encrypt", "decrypt"],
-    );
-
-    const rawKey = await subtle.exportKey("raw", key);
-    return toBase64(new Uint8Array(rawKey));
-  } catch (err) {
-    console.error("Error generating AES key:", err);
-    throw err;
-  }
 }
 
 function splitPayload(payload: string): {

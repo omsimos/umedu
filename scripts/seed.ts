@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { seed, reset } from "drizzle-seed";
-import * as schema from "./db/schema";
-import { AVAILABLE_TAGS } from "./lib/constants";
+import * as schema from "../db/schema";
+import { AVAILABLE_TAGS } from "../lib/constants";
 
 async function main() {
   const db = drizzle({
