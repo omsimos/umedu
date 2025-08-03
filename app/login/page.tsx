@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { LogInIcon, School, Shield, Info, AlertTriangle } from "lucide-react";
+import {
+  LogInIcon,
+  SchoolIcon,
+  ShieldIcon,
+  InfoIcon,
+  AlertTriangleIcon,
+} from "lucide-react";
 
 import { getSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -55,7 +61,7 @@ export default async function Login({ searchParams }: Props) {
                   variant="destructive"
                   className="border-destructive/20 bg-destructive/10"
                 >
-                  <AlertTriangle className="h-4 w-4 text-destructive" />
+                  <AlertTriangleIcon className="h-4 w-4 text-destructive" />
                   <AlertDescription className="text-destructive">
                     <div>
                       Invalid email domain. Please use a valid{" "}
@@ -69,7 +75,7 @@ export default async function Login({ searchParams }: Props) {
                   variant="default"
                   className="border-primary/20 bg-primary/10"
                 >
-                  <Info className="h-4 w-4 text-primary" />
+                  <InfoIcon className="h-4 w-4 text-primary" />
                   <AlertDescription className="text-foreground">
                     <div>
                       Sign in with your{" "}
@@ -82,7 +88,7 @@ export default async function Login({ searchParams }: Props) {
 
               <div className="space-y-4">
                 <div className="flex items-start gap-2">
-                  <School className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <SchoolIcon className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-muted-foreground">
                     You&apos;ll be assigned to a private forum based on your
                     educational institution&apos;s email domain.
@@ -90,7 +96,7 @@ export default async function Login({ searchParams }: Props) {
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <Shield className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <ShieldIcon className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-muted-foreground">
                     Your email is only used for verification. We don&apos;t
                     store your personal data beyond what&apos;s needed for
