@@ -27,10 +27,25 @@ export async function GET(
 
     const { tagsToPosts, ...rest } = post;
 
+    let title: string;
+    let content: string;
+
+    try {
+      title = await aesDecrypt(rest.title);
+    } catch {
+      title = rest.title;
+    }
+
+    try {
+      content = await aesDecrypt(rest.content);
+    } catch {
+      content = rest.content;
+    }
+
     const postData: Post & { tags: Tag[] } = {
       ...rest,
-      title: await aesDecrypt(rest.title),
-      content: await aesDecrypt(rest.content),
+      title,
+      content,
       tags: tagsToPosts.map((t) => t.tag),
     };
 

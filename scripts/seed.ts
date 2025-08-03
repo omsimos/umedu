@@ -1,4 +1,3 @@
-// scripts/seed.ts
 import { drizzle } from "drizzle-orm/libsql";
 import { seed } from "drizzle-seed";
 import * as schema from "../db/schema";
@@ -6,7 +5,59 @@ import { AVAILABLE_TAGS } from "../lib/constants";
 import { aesEncrypt } from "../lib/aes";
 import { faker } from "@faker-js/faker";
 
+import path from "path";
+import { promisify } from "util";
+import { promises as fs } from "fs";
+import { exec as _exec } from "child_process";
+
+const exec = promisify(_exec);
+
+async function cleanupLocalDbFiles() {
+  const cwd = process.cwd();
+  console.log("🧹 Cleaning up local.db* files in", cwd);
+  const files = await fs.readdir(cwd);
+  const toDelete = files.filter((f) => f.startsWith("local.db"));
+  await Promise.all(
+    toDelete.map(async (name) => {
+      const full = path.resolve(cwd, name);
+      try {
+        await fs.unlink(full);
+        console.log("✅ Deleted", name);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        if (err.code === "ENOENT") {
+          console.log("⚠️ File not found (skipping):", name);
+        } else {
+          console.warn("⚠️ Failed to delete", name, "→", err.message);
+        }
+      }
+    }),
+  );
+  if (toDelete.length === 0) {
+    console.log("ℹ️ No local.db* files found");
+  }
+}
+
+async function runMigrations() {
+  console.log("🚀 Running migrations via bun…");
+  try {
+    const { stdout, stderr } = await exec("bun drizzle-kit migrate");
+    if (stderr) {
+      console.error("🔴 Migration stderr:", stderr);
+      throw new Error("Migration failed");
+    }
+    console.log("📦 Migration output:", stdout);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    console.error("❌ Unable to run migrations:", err.message);
+    process.exit(1);
+  }
+}
+
 async function main() {
+  await cleanupLocalDbFiles();
+  await runMigrations();
+
   const db = drizzle({
     connection: {
       url: process.env.TURSO_CONNECTION_URL!,
@@ -14,7 +65,6 @@ async function main() {
     },
   });
 
-  // await reset(db, schema);
   await seed(db, { forum: schema.forumTable, tag: schema.tagTable }).refine(
     (f) => ({
       forum: {
@@ -56,4 +106,7 @@ async function main() {
   console.log("✅ Seed complete (encrypted posts inserted)");
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error("Unhandled error in seed script:", err);
+  process.exit(1);
+});

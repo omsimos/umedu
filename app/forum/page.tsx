@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { AlertCircle, MessageCircleDashedIcon } from "lucide-react";
+import { AlertCircleIcon, MessageCircleDashedIcon } from "lucide-react";
 import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
 
 import { PostCard } from "./components/post-card";
 import { PostCardSkeleton } from "./components/post-card-skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Post, Tag } from "@/db/schema";
+import { HoverPrefetchLink } from "@/components/hover-prefetch-link";
 
 type PostsResponse = {
   posts: (Post & { tags: Tag[] })[];
@@ -90,7 +90,7 @@ export default function FeedPage() {
     return (
       <div className="w-full mx-auto">
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircleIcon className="h-4 w-4" />
           <AlertDescription>
             Failed to load posts. Please try again later.
           </AlertDescription>
@@ -156,13 +156,13 @@ export default function FeedPage() {
                   </div>
                 )
               ) : (
-                <Link
+                <HoverPrefetchLink
                   href={`/posts/${post.id}`}
                   key={post.id}
                   className="block mb-3"
                 >
                   <PostCard key={post.id} post={post} />
-                </Link>
+                </HoverPrefetchLink>
               )}
             </div>
           );

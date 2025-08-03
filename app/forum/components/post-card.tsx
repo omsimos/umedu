@@ -1,6 +1,6 @@
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
-import { Calendar } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 
 import { Post, Tag } from "@/db/schema";
 import { formatDate, truncateContent } from "@/lib/utils";
@@ -38,7 +38,7 @@ export function PostCard({ post }: Props) {
         <div className="h-px bg-gradient-to-r from-transparent via-muted to-transparent" />
         <CardFooter className="text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
-            <Calendar className="w-3.5 h-3.5" />
+            <CalendarIcon className="w-3.5 h-3.5" />
             <span>Posted {formatDate(post.createdAt)}</span>
           </div>
         </CardFooter>

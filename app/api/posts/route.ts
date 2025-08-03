@@ -45,8 +45,8 @@ export async function GET(request: NextRequest) {
 
     const postsData = await Promise.all(
       posts.map(async ({ tagsToPosts, ...rest }) => {
-        let title: string | null;
-        let content: string | null;
+        let title: string;
+        let content: string;
 
         try {
           title = await aesDecrypt(rest.title);
