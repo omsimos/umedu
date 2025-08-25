@@ -71,7 +71,7 @@ export default function SubmitPage() {
 
   return (
     <form
-      className="space-y-6 w-full"
+      className="space-y-6 w-full min-h-screen"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
