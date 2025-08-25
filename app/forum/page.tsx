@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { useEffect } from "react";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AlertCircleIcon, MessageCircleDashedIcon } from "lucide-react";
 import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
@@ -43,13 +43,12 @@ export default function FeedPage() {
   });
 
   const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
-  const parentRef = useRef<HTMLDivElement>(null);
 
-  const virtualizer = useVirtualizer({
+  const virtualizer = useWindowVirtualizer({
     count: hasNextPage ? allPosts.length + 1 : allPosts.length,
-    getScrollElement: () => parentRef.current,
     estimateSize: () => 200,
     paddingEnd: 100,
+    overscan: 6,
   });
 
   const handleNextPage = useThrottledCallback(
@@ -110,7 +109,7 @@ export default function FeedPage() {
   }
 
   return (
-    <div ref={parentRef} className="h-[700px] w-full overflow-auto">
+    <div className="w-full overflow-auto">
       {allPosts.length === 0 && !isFetching && (
         <Alert>
           <MessageCircleDashedIcon />
