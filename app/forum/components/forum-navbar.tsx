@@ -9,7 +9,7 @@ type Props = {
 
 export function ForumNavbar({ forumId, renderButtons }: Props) {
   return (
-    <nav className="flex justify-between items-center w-full max-w-xl mx-auto py-6 fixed top-0 left-0 right-0 bg-background container">
+    <nav className="flex justify-between items-center w-full max-w-xl mx-auto py-6 fixed top-0 left-0 right-0 bg-background container z-50">
       <div className="flex items-center gap-2">
         <Link href="/forum" className="font-bold tracking-tighter">
           um<i>edu</i>
