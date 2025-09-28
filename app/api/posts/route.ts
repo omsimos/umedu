@@ -1,11 +1,13 @@
-import { z } from "zod/v4";
+import * as z from "zod";
 import type { NextRequest } from "next/server";
 import { desc, lt, and, or, eq } from "drizzle-orm";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 import { db } from "@/db";
-import { tagsToPostsTable, postTable } from "@/db/schema";
 import { getSession } from "@/lib/auth";
-import { aesDecrypt, aesEncrypt } from "@/lib/aes";
+import { aesEncrypt } from "@/lib/aes";
+import { safeDecrypt } from "@/lib/utils";
+import { tagsToPostsTable, postTable } from "@/db/schema";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,47 +20,52 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const cursor = searchParams.get("cursor");
 
-    let cursorCondition;
+    const posts = await unstable_cache(
+      async () => {
+        let cursorCondition;
 
-    if (cursor) {
-      const [createdAt, cursorId] = cursor.split("_");
-      const cursorDate = new Date(createdAt);
+        if (cursor) {
+          const [createdAt, cursorId] = cursor.split("_");
+          const cursorDate = new Date(createdAt);
 
-      cursorCondition = or(
-        lt(postTable.createdAt, cursorDate),
-        and(eq(postTable.createdAt, cursorDate), lt(postTable.id, cursorId)),
-      );
-    }
+          cursorCondition = or(
+            lt(postTable.createdAt, cursorDate),
+            and(
+              eq(postTable.createdAt, cursorDate),
+              lt(postTable.id, cursorId),
+            ),
+          );
+        }
 
-    const posts = await db.query.postTable.findMany({
-      with: {
-        tagsToPosts: {
+        const data = await db.query.postTable.findMany({
           with: {
-            tag: true,
+            tagsToPosts: {
+              with: {
+                tag: true,
+              },
+            },
           },
-        },
+          where: cursorCondition
+            ? and(cursorCondition, eq(postTable.forumId, session?.forumId))
+            : eq(postTable.forumId, session?.forumId),
+          orderBy: [desc(postTable.createdAt), desc(postTable.id)],
+          limit: 10,
+        });
+
+        return data;
       },
-      where: and(cursorCondition, eq(postTable.forumId, session?.forumId)),
-      orderBy: [desc(postTable.createdAt), desc(postTable.id)],
-      limit: 10,
-    });
+      ["api-posts", session.forumId, cursor ?? ""],
+      {
+        tags: [`posts:${session.forumId}:feed`],
+        revalidate: 60,
+      },
+    )();
 
     const postsData = await Promise.all(
       posts.map(async ({ tagsToPosts, ...rest }) => {
-        let title: string;
-        let content: string;
+        const title = await safeDecrypt(rest.title);
+        const content = await safeDecrypt(rest.content);
 
-        try {
-          title = await aesDecrypt(rest.title);
-        } catch {
-          title = rest.title;
-        }
-
-        try {
-          content = await aesDecrypt(rest.content);
-        } catch {
-          content = rest.content;
-        }
         return {
           ...rest,
           title,
@@ -131,6 +138,8 @@ export async function POST(req: Request) {
         forumId: session.forumId,
       });
     }
+
+    revalidateTag(`posts:${session.forumId}:feed`);
 
     return Response.json(
       { message: "Post added successfully" },
