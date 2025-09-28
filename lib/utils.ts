@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 import { format } from "date-fns";
+import { aesDecrypt } from "./aes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,3 +23,11 @@ export const getBaseUrl = () => {
 
   return "http://localhost:3000";
 };
+
+export async function safeDecrypt(encryptedText: string) {
+  try {
+    return await aesDecrypt(encryptedText);
+  } catch {
+    return encryptedText;
+  }
+}
