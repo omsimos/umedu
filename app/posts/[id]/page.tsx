@@ -1,15 +1,18 @@
 import { Metadata } from "next";
+import { eq } from "drizzle-orm";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 
-import { Post, Tag } from "@/db/schema";
+import { db } from "@/db";
+import { postTable } from "@/db/schema";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { PostDate } from "./components/post-date";
 import { Separator } from "@/components/ui/separator";
 import { ShareButton } from "./components/share-button";
-import { getBaseUrl, truncateContent } from "@/lib/utils";
+import { safeDecrypt, truncateContent } from "@/lib/utils";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 
 type Props = {
@@ -20,13 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const post = await getPost(id);
 
-  const title = `Umedu – ${post.title}`;
-  const description = truncateContent(post.content, 160);
+  const title = `Umedu – ${post?.title}`;
+  const description = truncateContent(post?.content ?? "", 160);
 
   return {
     metadataBase: new URL(`https://umedu.omsimos.com/posts/${id}`),
-    title: `Umedu | ${post.title}`,
-    description: truncateContent(post.content),
+    title: `Umedu | ${post?.title}`,
+    description: truncateContent(post?.content ?? ""),
     openGraph: {
       type: "website",
       siteName: "Umedu",
@@ -48,6 +51,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { id } = await params;
   const post = await getPost(id);
+
+  if (!post) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
@@ -82,16 +89,39 @@ export default async function Page({ params }: Props) {
   );
 }
 
-async function getPost(id: string): Promise<Post & { tags: Tag[] }> {
-  const res = await fetch(`${getBaseUrl()}/api/posts/${id}`, {
-    cache: "force-cache",
-    next: {
-      tags: [`post-${id}`],
+async function getPost(id: string) {
+  const post = await unstable_cache(
+    async () =>
+      db.query.postTable.findFirst({
+        where: eq(postTable.id, id),
+        with: {
+          tagsToPosts: {
+            with: {
+              tag: true,
+            },
+          },
+        },
+      }),
+    [id],
+    {
+      tags: [`post:${id}`],
+      revalidate: 120,
     },
-  });
+  )();
 
-  if (!res.ok) notFound();
-  const post = await res.json();
+  if (!post) {
+    return null;
+  }
 
-  return post;
+  const { tagsToPosts, ...rest } = post;
+
+  const title = await safeDecrypt(rest.title);
+  const content = await safeDecrypt(rest.content);
+
+  return {
+    ...rest,
+    title,
+    content,
+    tags: tagsToPosts.map((t) => t.tag),
+  };
 }

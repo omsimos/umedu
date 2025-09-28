@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { tagTable } from "@/db/schema";
 import { getSession } from "@/lib/auth";
 import { eq } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import { NextRequest } from "next/server";
 import z from "zod/v4";
 
@@ -12,7 +13,10 @@ export async function GET() {
     if (!session) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const tags = await db.query.tagTable.findMany();
+    const tags = await unstable_cache(
+      async () => db.query.tagTable.findMany(),
+      ["api-tags"],
+    )();
 
     return Response.json(tags);
   } catch (error) {
