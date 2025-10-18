@@ -1,6 +1,5 @@
-import * as crypto from "node:crypto";
-
-const { subtle } = globalThis.crypto;
+const { crypto } = globalThis;
+const { subtle } = crypto;
 
 function toUint8Array(base64: string): Uint8Array {
   const buf = Buffer.from(base64, "base64");
