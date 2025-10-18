@@ -71,11 +71,7 @@
       "indexes": {
         "post_forum_created_id_idx": {
           "name": "post_forum_created_id_idx",
-          "columns": [
-            "forum_id",
-            "created_at",
-            "id"
-          ],
+          "columns": ["forum_id", "created_at", "id"],
           "isUnique": false
         }
       },
@@ -84,12 +80,8 @@
           "name": "post_forum_id_forum_id_fk",
           "tableFrom": "post",
           "tableTo": "forum",
-          "columnsFrom": [
-            "forum_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["forum_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -129,12 +121,8 @@
           "name": "session_forum_id_forum_id_fk",
           "tableFrom": "session",
           "tableTo": "forum",
-          "columnsFrom": [
-            "forum_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["forum_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -164,9 +152,7 @@
       "indexes": {
         "tag_name_unique": {
           "name": "tag_name_unique",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
@@ -199,12 +185,8 @@
           "name": "tags_to_posts_post_id_post_id_fk",
           "tableFrom": "tags_to_posts",
           "tableTo": "post",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -212,22 +194,15 @@
           "name": "tags_to_posts_tag_id_tag_id_fk",
           "tableFrom": "tags_to_posts",
           "tableTo": "tag",
-          "columnsFrom": [
-            "tag_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tag_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "tags_to_posts_post_id_tag_id_pk": {
-          "columns": [
-            "post_id",
-            "tag_id"
-          ],
+          "columns": ["post_id", "tag_id"],
           "name": "tags_to_posts_post_id_tag_id_pk"
         }
       },

@@ -1,11 +1,10 @@
-import remarkGfm from "remark-gfm";
-import Markdown from "react-markdown";
 import { CalendarIcon } from "lucide-react";
-
-import { Post, Tag } from "@/db/schema";
-import { formatDate, truncateContent } from "@/lib/utils";
-import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import type { Post, Tag } from "@/db/schema";
+import { formatDate, truncateContent } from "@/lib/utils";
 
 type Props = {
   post: Post & { tags: Tag[] };
@@ -31,7 +30,6 @@ export function PostCard({ post }: Props) {
             </Badge>
           ))}
         </div>
-
       </CardContent>
 
       <div className="space-y-6">

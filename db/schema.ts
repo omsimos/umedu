@@ -1,5 +1,4 @@
 import { relations, sql } from "drizzle-orm";
-import { nanoid } from "nanoid";
 import {
   index,
   integer,
@@ -7,6 +6,7 @@ import {
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
+import { nanoid } from "nanoid";
 
 export const forumTable = sqliteTable("forum", {
   id: text("id").primaryKey(),
@@ -45,7 +45,7 @@ export const tagTable = sqliteTable("tag", {
 });
 
 export const tagsRelations = relations(tagTable, ({ many }) => ({
- tagsToPosts: many(tagsToPostsTable),
+  tagsToPosts: many(tagsToPostsTable),
 }));
 
 export const tagsToPostsTable = sqliteTable(

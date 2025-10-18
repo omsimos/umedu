@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { Metadata } from "next";
 import { GitPullRequestArrowIcon } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Navbar } from "@/components/navbar";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const metadata: Metadata = {
   title: "Umedu — About",

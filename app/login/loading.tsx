@@ -1,5 +1,5 @@
+import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoginLoading() {
   return (

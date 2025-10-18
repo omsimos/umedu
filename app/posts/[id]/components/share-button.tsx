@@ -1,8 +1,8 @@
 "use client";
 
 import { Share2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   title: string;

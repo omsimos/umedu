@@ -1,18 +1,16 @@
-import { z } from "zod/v4";
+import type { OAuth2Tokens } from "arctic";
+import { decodeIdToken } from "arctic";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { decodeIdToken } from "arctic";
-import type { OAuth2Tokens } from "arctic";
-
+import { z } from "zod/v4";
+import { db } from "@/db";
+import { forumTable } from "@/db/schema";
+import { google } from "@/lib/oauth";
 import {
-  generateSessionToken,
   createSession,
+  generateSessionToken,
   setSessionTokenCookie,
 } from "@/lib/session";
-
-import { db } from "@/db";
-import { google } from "@/lib/oauth";
-import { forumTable } from "@/db/schema";
 
 const claimsSchema = z.object({
   sub: z.string(),

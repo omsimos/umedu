@@ -1,13 +1,13 @@
-import * as z from "zod";
-import type { NextRequest } from "next/server";
-import { desc, lt, and, or, eq } from "drizzle-orm";
+import { and, desc, eq, lt, or } from "drizzle-orm";
 import { revalidateTag, unstable_cache } from "next/cache";
+import type { NextRequest } from "next/server";
+import * as z from "zod";
 
 import { db } from "@/db";
-import { getSession } from "@/lib/auth";
+import { postTable, tagsToPostsTable } from "@/db/schema";
 import { aesEncrypt } from "@/lib/aes";
+import { getSession } from "@/lib/auth";
 import { safeDecrypt } from "@/lib/utils";
-import { tagsToPostsTable, postTable } from "@/db/schema";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
 
     const posts = await unstable_cache(
       async () => {
+        // biome-ignore lint/suspicious/noImplicitAnyLet: temp
         let cursorCondition;
 
         if (cursor) {

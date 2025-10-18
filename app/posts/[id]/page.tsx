@@ -1,19 +1,18 @@
-import { Metadata } from "next";
 import { eq } from "drizzle-orm";
-import remarkGfm from "remark-gfm";
-import Markdown from "react-markdown";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
-
-import { db } from "@/db";
-import { postTable } from "@/db/schema";
+import { notFound } from "next/navigation";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import { PostDate } from "./components/post-date";
 import { Separator } from "@/components/ui/separator";
-import { ShareButton } from "./components/share-button";
+import { db } from "@/db";
+import { postTable } from "@/db/schema";
 import { safeDecrypt, truncateContent } from "@/lib/utils";
-import { ForumNavbar } from "@/app/forum/components/forum-navbar";
+import { PostDate } from "./components/post-date";
+import { ShareButton } from "./components/share-button";
 
 type Props = {
   params: Promise<{ id: string }>;

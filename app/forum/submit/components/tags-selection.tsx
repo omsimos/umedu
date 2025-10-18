@@ -1,9 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
-import { useState } from "react";
 import { TagIcon } from "lucide-react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +20,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { DisplayTags } from "./display-tags";
 
 type Props = {

@@ -1,5 +1,5 @@
-import { Tag } from "@/db/schema";
 import { queryOptions } from "@tanstack/react-query";
+import type { Tag } from "@/db/schema";
 
 export const getTagsQuery = queryOptions<Array<Tag>>({
   queryKey: ["tags"],

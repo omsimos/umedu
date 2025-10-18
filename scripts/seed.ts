@@ -1,14 +1,13 @@
+import { exec as _exec } from "node:child_process";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { promisify } from "node:util";
+import { faker } from "@faker-js/faker";
 import { drizzle } from "drizzle-orm/libsql";
 import { seed } from "drizzle-seed";
 import * as schema from "../db/schema";
-import { AVAILABLE_TAGS } from "../lib/constants";
 import { aesEncrypt } from "../lib/aes";
-import { faker } from "@faker-js/faker";
-
-import path from "path";
-import { promisify } from "util";
-import { promises as fs } from "fs";
-import { exec as _exec } from "child_process";
+import { AVAILABLE_TAGS } from "../lib/constants";
 
 const exec = promisify(_exec);
 
@@ -23,18 +22,18 @@ async function cleanupLocalDbFiles() {
       try {
         await fs.unlink(full);
         console.log("✅ Deleted", name);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: temp
       } catch (err: any) {
         if (err.code === "ENOENT") {
-          console.log("⚠️ File not found (skipping):", name);
+          console.log("! File not found (skipping):", name);
         } else {
-          console.warn("⚠️ Failed to delete", name, "→", err.message);
+          console.warn("! Failed to delete", name, "→", err.message);
         }
       }
     }),
   );
   if (toDelete.length === 0) {
-    console.log("ℹ️ No local.db* files found");
+    console.log("i No local.db* files found");
   }
 }
 
@@ -47,7 +46,7 @@ async function runMigrations() {
       throw new Error("Migration failed");
     }
     console.log("📦 Migration output:", stdout);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: temp
   } catch (err: any) {
     console.error("❌ Unable to run migrations:", err.message);
     process.exit(1);
@@ -60,8 +59,8 @@ async function main() {
 
   const db = drizzle({
     connection: {
-      url: process.env.TURSO_CONNECTION_URL!,
-      authToken: process.env.TURSO_AUTH_TOKEN!,
+      url: process.env.TURSO_CONNECTION_URL ?? "",
+      authToken: process.env.TURSO_AUTH_TOKEN ?? "",
     },
   });
 

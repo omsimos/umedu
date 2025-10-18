@@ -1,9 +1,11 @@
 "use client";
 
+import { useQueryErrorResetBoundary } from "@tanstack/react-query";
+import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
-import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
-import { useQueryErrorResetBoundary } from "@tanstack/react-query";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,10 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function Error({
+export default function ErrorPage({
   error,
   reset,
 }: {

@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { MessageSquareTextIcon } from "lucide-react";
-
-import { Navbar } from "@/components/navbar";
+import Link from "next/link";
 import { Footer } from "@/components/footer";
-import { Button } from "@/components/ui/button";
 import { HighlightText } from "@/components/highlight-text";
+import { Navbar } from "@/components/navbar";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
