@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { Metadata } from "next";
-import { redirect } from "next/navigation";
 import {
   HomeIcon,
   InfoIcon,
   MessageCirclePlusIcon,
   SquareCodeIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { logout } from "@/actions/auth";
-import { getSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/lib/auth";
 import { ForumNavbar } from "./components/forum-navbar";
 import { LogoutButton } from "./components/logout-button";
 

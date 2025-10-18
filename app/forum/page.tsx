@@ -1,17 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect } from "react";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { AlertCircleIcon, MessageCircleDashedIcon } from "lucide-react";
 import { useThrottledCallback } from "@tanstack/react-pacer/throttler";
-
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { AlertCircleIcon, MessageCircleDashedIcon } from "lucide-react";
+import { useEffect } from "react";
+import { HoverPrefetchLink } from "@/components/hover-prefetch-link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Post, Tag } from "@/db/schema";
 import { PostCard } from "./components/post-card";
 import { PostCardSkeleton } from "./components/post-card-skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Post, Tag } from "@/db/schema";
-import { HoverPrefetchLink } from "@/components/hover-prefetch-link";
 
 type PostsResponse = {
   posts: (Post & { tags: Tag[] })[];
@@ -76,11 +74,10 @@ export default function FeedPage() {
     }
   }, [
     hasNextPage,
-    fetchNextPage,
     allPosts.length,
     isFetchingNextPage,
     handleNextPage,
-    virtualizer.getVirtualItems(),
+    virtualizer,
   ]);
 
   const items = virtualizer.getVirtualItems();
@@ -101,9 +98,9 @@ export default function FeedPage() {
   if (isLoading) {
     return (
       <div className="w-full mx-auto space-y-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <PostCardSkeleton key={i} />
-        ))}
+        <PostCardSkeleton />
+        <PostCardSkeleton />
+        <PostCardSkeleton />
       </div>
     );
   }

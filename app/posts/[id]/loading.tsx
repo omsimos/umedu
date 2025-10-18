@@ -1,6 +1,6 @@
-import { Separator } from "@/components/ui/separator";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { Footer } from "@/components/footer";
+import { Separator } from "@/components/ui/separator";
 
 export default function Loading() {
   return (

@@ -1,15 +1,16 @@
-import Link from "next/link";
-import { Metadata } from "next";
-import { redirect } from "next/navigation";
 import {
+  AlertTriangleIcon,
+  InfoIcon,
   LogInIcon,
   SchoolIcon,
   ShieldIcon,
-  InfoIcon,
-  AlertTriangleIcon,
 } from "lucide-react";
-
-import { getSession } from "@/lib/auth";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,10 +20,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Navbar } from "@/components/navbar";
 import { Separator } from "@/components/ui/separator";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Footer } from "@/components/footer";
+import { getSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Umedu — Login",

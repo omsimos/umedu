@@ -1,6 +1,6 @@
-import { cache } from "react";
 import { cookies } from "next/headers";
-import { SessionValidationResult, validateSessionToken } from "./session";
+import { cache } from "react";
+import { type SessionValidationResult, validateSessionToken } from "./session";
 
 export const getSession = cache(async (): Promise<SessionValidationResult> => {
   const cookieStore = await cookies();

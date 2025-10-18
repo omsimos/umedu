@@ -1,13 +1,13 @@
+import { sha256 } from "@oslojs/crypto/sha2";
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { sha256 } from "@oslojs/crypto/sha2";
 
 import { db } from "@/db";
-import { Session, sessionTable } from "@/db/schema";
+import { type Session, sessionTable } from "@/db/schema";
 
 export function generateSessionToken() {
   const bytes = new Uint8Array(20);

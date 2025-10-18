@@ -1,17 +1,15 @@
-/* eslint-disable react/no-children-prop */
 "use client";
 
-import { z } from "zod/v4";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SendHorizonalIcon, XIcon } from "lucide-react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-
-import { useAppForm } from "@/hooks/form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod/v4";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { TagsSelection } from "./components/tags-selection";
+import { useAppForm } from "@/hooks/form";
 import { getTagsQuery } from "@/lib/queries";
+import { TagsSelection } from "./components/tags-selection";
 
 const messageSchema = z.object({
   title: z

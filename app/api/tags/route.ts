@@ -1,10 +1,10 @@
+import { eq } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
+import type { NextRequest } from "next/server";
+import z from "zod/v4";
 import { db } from "@/db";
 import { tagTable } from "@/db/schema";
 import { getSession } from "@/lib/auth";
-import { eq } from "drizzle-orm";
-import { unstable_cache } from "next/cache";
-import { NextRequest } from "next/server";
-import z from "zod/v4";
 
 export async function GET() {
   try {

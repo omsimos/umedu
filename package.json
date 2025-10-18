@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack & turso dev --db-file local.db",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "format-and-lint:fix": "biome check --write",
     "ui:add": "bunx --bun shadcn@latest add",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -53,7 +55,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
+    "@biomejs/biome": "2.2.6",
     "@faker-js/faker": "^10.1.0",
     "@tailwindcss/postcss": "^4.1.14",
     "@tailwindcss/typography": "^0.5.19",
@@ -61,8 +63,6 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "drizzle-kit": "0.31.5",
-    "eslint": "^9.38.0",
-    "eslint-config-next": "15.5.4",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3"
   }

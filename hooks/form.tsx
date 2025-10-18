@@ -1,12 +1,11 @@
-import { LucideIcon } from "lucide-react";
-
+import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import type { LucideIcon } from "lucide-react";
+import { CharacterCounter } from "@/components/character-counter";
+import { LoadingIcon } from "@/components/loading-icon";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
-import { LoadingIcon } from "@/components/loading-icon";
-import { CharacterCounter } from "@/components/character-counter";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
