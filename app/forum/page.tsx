@@ -54,7 +54,7 @@ export default function FeedPage() {
       fetchNextPage();
     },
     {
-      wait: 3000,
+      wait: 2000,
     },
   );
 
