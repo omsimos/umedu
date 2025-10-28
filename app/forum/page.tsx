@@ -54,10 +54,11 @@ export default function FeedPage() {
       fetchNextPage();
     },
     {
-      wait: 3000,
+      wait: 2000,
     },
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: virtualizer.getVirtualItems is stable
   useEffect(() => {
     const [lastItem] = [...virtualizer.getVirtualItems()].reverse();
 
@@ -77,7 +78,7 @@ export default function FeedPage() {
     allPosts.length,
     isFetchingNextPage,
     handleNextPage,
-    virtualizer,
+    virtualizer.getVirtualItems(),
   ]);
 
   const items = virtualizer.getVirtualItems();
