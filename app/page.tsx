@@ -1,5 +1,6 @@
 import { MessageSquareTextIcon } from "lucide-react";
 import Link from "next/link";
+import DecryptedText from "@/components/DecryptedText";
 import { Footer } from "@/components/footer";
 import { HighlightText } from "@/components/highlight-text";
 import LightRays from "@/components/LightRays";
@@ -29,7 +30,13 @@ export default function Home() {
             um<i>edu</i>
           </h1>
           <p className="text-muted-foreground font-medium text-center">
-            open-source, anonymous, encrypted, private <i>edu</i> forums
+            open-source, anonymous,
+            <DecryptedText
+              text=" encrypted"
+              animateOn="both"
+              className="cursor-crosshair"
+            />
+            , private <i>edu</i> forums
           </p>
 
           <Button asChild className="mt-4" variant="outline">
