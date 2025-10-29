@@ -1,6 +1,8 @@
 import { GitPullRequestArrowIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { logout } from "@/actions/auth";
+import { DockNav } from "@/components/dock-nav";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -11,9 +13,10 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="min-h-screen flex flex-col justify-between pb-16">
       <section>
         <Navbar />
+        <DockNav logout={logout} />
 
         <div className="space-y-12">
           <Alert className="mt-4">
