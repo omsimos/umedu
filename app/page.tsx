@@ -2,12 +2,26 @@ import { MessageSquareTextIcon } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { HighlightText } from "@/components/highlight-text";
+import LightRays from "@/components/LightRays";
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="h-screen flex flex-col justify-between">
+      <LightRays
+        raysOrigin="top-center"
+        raysColor="#ffffff"
+        raysSpeed={1}
+        lightSpread={0.5}
+        fadeDistance={1}
+        rayLength={5}
+        followMouse={true}
+        mouseInfluence={0.1}
+        noiseAmount={0.1}
+        distortion={0}
+        className="custom-rays absolute inset-0 -z-10 opacity-50"
+      />
       <section>
         <Navbar />
         <div className="flex items-center flex-col">
