@@ -72,8 +72,15 @@ export default function Home() {
             </HighlightText>
             email. No personal information is stored, ensuring your privacy is
             protected.{" "}
-            <Link href="/about" className="text-white">
-              Learn more &rarr;
+            <Link
+              href="/about"
+              className="text-white  gap-1 group inline-flex hover:text-muted-foreground transition-all"
+            >
+              Learn more{" "}
+              <span className="group-hover:translate-x-1.5 m transition-transform">
+                {" "}
+                &rarr;
+              </span>
             </Link>
           </div>
         </div>
