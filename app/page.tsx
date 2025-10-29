@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { HighlightText } from "@/components/highlight-text";
 import LightRays from "@/components/LightRays";
 import { Navbar } from "@/components/navbar";
+import ShinyText from "@/components/ShinyText";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -41,7 +42,8 @@ export default function Home() {
 
           <Button asChild className="mt-4" variant="outline">
             <Link href="/login">
-              Access your private forum <MessageSquareTextIcon />
+              <ShinyText text="✨ Access your private forum" duration={3} />
+              <MessageSquareTextIcon className="text-muted-foreground/50" />
             </Link>
           </Button>
 
