@@ -38,6 +38,7 @@
         "react-markdown": "^10.1.0",
         "remark-gfm": "^4.0.1",
         "sonner": "^2.0.7",
+        "svg-dotted-map": "^2.0.1",
         "tailwind-merge": "^3.3.1",
         "tailwindcss-animate": "^1.0.7",
         "vaul": "^1.1.2",
@@ -758,6 +759,8 @@
     "style-to-object": ["style-to-object@1.0.8", "", { "dependencies": { "inline-style-parser": "0.2.4" } }, "sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g=="],
 
     "styled-jsx": ["styled-jsx@5.1.6", "", { "dependencies": { "client-only": "0.0.1" }, "peerDependencies": { "react": ">= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0" } }, "sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA=="],
+
+    "svg-dotted-map": ["svg-dotted-map@2.0.1", "", {}, "sha512-eeI2XzIKm23gmSVr7ASTMNVJvxAvBfyL30tN33Y/DcZCJXvC/Br/cxQp9Ts6jDK/e7fkE5TpZStEfduPqPXrIw=="],
 
     "tailwind-merge": ["tailwind-merge@3.3.1", "", {}, "sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g=="],
 
