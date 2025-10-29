@@ -13,9 +13,9 @@ export function LogoutButton() {
       className="grid place-items-center"
     >
       {pending ? (
-        <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+        <Loader2Icon className="size-4 animate-spin text-muted-foreground" />
       ) : (
-        <LogOutIcon className="size-5" />
+        <LogOutIcon className="size-4" />
       )}
     </button>
   );
