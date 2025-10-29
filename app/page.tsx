@@ -1,6 +1,7 @@
 import { MessageSquareTextIcon } from "lucide-react";
 import Link from "next/link";
 import DecryptedText from "@/components/DecryptedText";
+import { FlatMap } from "@/components/flat-map";
 import { Footer } from "@/components/footer";
 import { HighlightText } from "@/components/highlight-text";
 import LightRays from "@/components/LightRays";
@@ -22,7 +23,7 @@ export default function Home() {
         mouseInfluence={0.1}
         noiseAmount={0.1}
         distortion={0}
-        className="custom-rays absolute inset-0 -z-10 opacity-50"
+        className="custom-rays absolute inset-0 -z-10 opacity-40"
       />
       <section>
         <Navbar />
@@ -85,7 +86,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <div className="w-1/2 absolute left-0 right-0 mx-auto bottom-20 -z-10">
+        <FlatMap />
+      </div>
       <Footer />
     </div>
   );
