@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { logout } from "@/actions/auth";
 import { DockNav } from "@/components/dock-nav";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { getSession } from "@/lib/auth";
 import { ForumNavbar } from "./components/forum-navbar";
 
@@ -30,7 +29,6 @@ export default async function ForumLayout({
 
       {children}
       <DockNav logout={logout} />
-      <ProgressiveBlur position="bottom" height="20%" className="fixed" />
     </section>
   );
 }
