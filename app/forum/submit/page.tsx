@@ -2,12 +2,14 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  ArrowLeftIcon,
   LightbulbIcon,
   SendHorizonalIcon,
   ShieldCheckIcon,
   SparklesIcon,
   XIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -113,7 +115,10 @@ export default function SubmitPage() {
 
   return (
     <section className="space-y-4 w-[70vw] pb-20">
-      <div className="relative overflow-hidden rounded-3xl border bg-linear-to-br from-primary/10 via-background to-transparent p-6 shadow-sm dark:from-zinc-900">
+      <Link href="/forum" className="mb-4">
+        <ArrowLeftIcon className="text-zinc-600 hover:opacity-65 transition-opacity  z-50" />
+      </Link>
+      <div className="mt-4 relative overflow-hidden rounded-3xl border bg-linear-to-br from-primary/10 via-background to-transparent p-6 shadow-sm dark:from-zinc-900">
         <div className="space-y-3">
           <Badge variant="secondary" className="w-fit uppercase text-xs">
             Submit anonymously
@@ -128,9 +133,9 @@ export default function SubmitPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
         <form
-          className="space-y-6 w-full rounded-3xl border bg-card/80 p-6 shadow-sm"
+          className="space-y-4 w-full rounded-3xl border bg-card/80 p-6 shadow-sm"
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();

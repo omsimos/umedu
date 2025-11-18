@@ -17,13 +17,7 @@ import ShinyText from "@/components/ShinyText";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { Separator } from "@/components/ui/separator";
 import type { Post, Tag } from "@/db/schema";
@@ -151,10 +145,10 @@ export default function FeedPage() {
             <CardTitle className="text-2xl">
               Share it anonymously in seconds.
             </CardTitle>
-            <CardDescription>
-              Wondering what to write? Use a quick prompt, add up to three tags,
-              and get thoughtful replies from peers who&apos;ve been there.
-            </CardDescription>
+            <ShinyText
+              text="Real students. Instant support. Zero judgment."
+              className="text-base font-medium"
+            />
           </CardHeader>
 
           <CardFooter className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
