@@ -17,7 +17,7 @@ export function PostCard({ post }: Props) {
         <CardTitle className="mb-2 leading-tight truncate">
           {post.title}
         </CardTitle>
-        <div className="min-w-0 break-words dark:prose-invert text-muted-foreground font-medium">
+        <div className="min-w-0 wrap-break-word dark:prose-invert text-muted-foreground font-medium">
           <Markdown remarkPlugins={[remarkGfm]}>
             {truncateContent(post.content).replace(/\s+/g, " ")}
           </Markdown>
