@@ -29,26 +29,6 @@ export default async function ForumLayout({
 
       {children}
       <DockNav logout={logout} />
-      {/* 
-      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-xl mx-auto flex items-center justify-evenly fixed bottom-0 right-0 left-0">
-        <Link href="/">
-          <HomeIcon className="size-5" />
-        </Link>
-        <Link href="/about">
-          <InfoIcon className="size-5" />
-        </Link>
-        <Button asChild size="icon">
-          <Link href="/forum/submit">
-            <MessageCirclePlusIcon className="size-6" />
-          </Link>
-        </Button>
-        <Link href="https://github.com/joshxfi/umedu" target="_blank">
-          <SquareCodeIcon className="size-5" />
-        </Link>
-        <form action={logout}>
-          <LogoutButton />
-        </form>
-      </section> */}
     </section>
   );
 }
