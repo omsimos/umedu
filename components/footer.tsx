@@ -8,8 +8,8 @@ export function Footer() {
           um<i>edu</i>
         </span>{" "}
         by{" "}
-        <Link href="https://www.instagram.com/josh.xfi/" target="_blank">
-          @josh.xfi
+        <Link href="https://github.com/omsimos" target="_blank">
+          @omsimos
         </Link>
       </div>
     </footer>

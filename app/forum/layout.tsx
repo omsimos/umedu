@@ -1,18 +1,9 @@
-import {
-  HomeIcon,
-  InfoIcon,
-  MessageCirclePlusIcon,
-  SquareCodeIcon,
-} from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-
 import { logout } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
+import { DockNav } from "@/components/dock-nav";
 import { getSession } from "@/lib/auth";
 import { ForumNavbar } from "./components/forum-navbar";
-import { LogoutButton } from "./components/logout-button";
 
 export const metadata: Metadata = {
   title: "Umedu — Private Forum",
@@ -37,26 +28,7 @@ export default async function ForumLayout({
       <ForumNavbar forumId={session.forumId} />
 
       {children}
-
-      <section className="rounded-t-4xl bg-secondary w-full p-4 max-w-xl mx-auto flex items-center justify-evenly fixed bottom-0 right-0 left-0">
-        <Link href="/">
-          <HomeIcon className="size-5" />
-        </Link>
-        <Link href="/about">
-          <InfoIcon className="size-5" />
-        </Link>
-        <Button asChild size="icon">
-          <Link href="/forum/submit">
-            <MessageCirclePlusIcon className="size-6" />
-          </Link>
-        </Button>
-        <Link href="https://github.com/joshxfi/umedu" target="_blank">
-          <SquareCodeIcon className="size-5" />
-        </Link>
-        <form action={logout}>
-          <LogoutButton />
-        </form>
-      </section>
+      <DockNav logout={logout} />
     </section>
   );
 }

@@ -1,12 +1,21 @@
 import { eq } from "drizzle-orm";
+import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ForumNavbar } from "@/app/forum/components/forum-navbar";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
 import { postTable } from "@/db/schema";
@@ -55,33 +64,62 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
+  const wordCount = post.content.trim().split(/\s+/).length;
+  const readingTime = Math.max(1, Math.round(wordCount / 180));
+
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <div className="mb-8">
-        <ForumNavbar
-          forumId={post.forumId}
-          renderButtons={() => <ShareButton title={post.title} />}
-        />
-        <div className="space-y-2">
-          <h2 className="text-lg mt-24 font-semibold">{post.title}</h2>
+    <div className="flex min-h-screen flex-col">
+      <ForumNavbar
+        forumId={post.forumId}
+        renderButtons={() => <ShareButton title={post.title} />}
+      />
+      <main className="mt-24 flex flex-1 flex-col gap-6 pb-16">
+        <Link href="/forum">
+          <ArrowLeftIcon className="text-zinc-600 hover:opacity-65 transition-opacity  z-50" />
+        </Link>
+        <Card className="relative overflow-hidden border bg-linear-to-br from-primary/5 via-background to-background shadow-sm">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(161,98,7,0.12),transparent_45%)] opacity-80" />
+          <CardHeader className="relative space-y-4">
+            <Badge
+              variant="secondary"
+              className="w-fit text-xs uppercase tracking-wide"
+            >
+              Anonymous thread
+            </Badge>
+            <CardTitle className="text-2xl font-semibold leading-tight sm:text-3xl">
+              {post.title}
+            </CardTitle>
+            <CardDescription className="flex flex-wrap gap-2 text-sm">
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag.id}
+                  variant="secondary"
+                  className="bg-secondary/70 text-secondary-foreground/80"
+                >
+                  {tag.name}
+                </Badge>
+              ))}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="relative flex flex-wrap gap-3 text-sm text-muted-foreground">
+            <PostDate createdAt={post.createdAt} />
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-muted/40 px-3 py-1 text-xs font-medium">
+              {wordCount.toLocaleString()} words
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-muted/40 px-3 py-1 text-xs font-medium">
+              {readingTime} min read
+            </span>
+          </CardContent>
+        </Card>
 
-          <div className="space-x-2">
-            {post.tags.map((tag) => (
-              <Badge key={tag.id} variant="secondary">
-                {tag.name}
-              </Badge>
-            ))}
+        <section className="rounded-3xl border bg-card/80 p-6 shadow-sm">
+          <div className="prose prose-neutral max-w-none text-base leading-relaxed dark:prose-invert">
+            <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
           </div>
-
-          <PostDate createdAt={post.createdAt} />
-        </div>
+        </section>
 
         <Separator className="my-4" />
-
-        <div className="prose dark:prose-invert font-medium">
-          <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
-        </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
